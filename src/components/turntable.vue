@@ -60,7 +60,7 @@
     </div>
 </template>
 <script>
-import '../assets/js/jquery.rotate.min.js'
+import '../assets/js/jquery.rotate.js'
 export default {
     name: 'turntable',
     data () {

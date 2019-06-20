@@ -74,7 +74,6 @@ export default {
                 this.$refs.borther.bortherMethods();
                 layer.open({type:3});
             } catch (error) {
-                console.log('betcenter出错')
                 layer.open({type:3});
             }
             

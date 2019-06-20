@@ -28,9 +28,6 @@
                     <p class="betcenterContent_header_time_p" v-if="data.thisOpenTottery.next_stage==undefined">第<strong>{{ Number(data.thisOpenTottery.next_stage)-1 }}</strong>期开奖号码</p>
                     <p class="betcenterContent_header_time_p" v-else>正在等待第<strong>{{ Number(data.thisOpenTottery.next_stage)-1 }}</strong>期开奖......</p>
                 </template>
-                <!-- <template v-else>
-                    <p class="betcenterContent_header_time_p">正在等待第<strong>{{ Number(data.thisOpenTottery)-1 }}</strong>期开奖......</p>
-                </template> -->
                 <div>
                     <template>
                         <span class="lottery__highlight_y" v-for="(d,i) in data.lastOneNumber" :key="i">{{ d }}</span>
@@ -62,7 +59,27 @@
         <div class="betcenterContent_Nav_Subnavs_body">
             <!-- 主体左边 -->
             <div class="betcenterContent_Nav_Subnavs_body_left">
-                <div class="selectLotteryTicketNum"></div>
+                <div class="selectLotteryTicketNum">
+                    <!-- 五星 -->
+                        <template v-if="NavTwo_index==1">
+                            <div class="selectLotteryTicketNum_box" v-for="(k,index) in 5" :key="index">
+                                <div class="weishu">{{ titleArr[index] }}</div>
+                                <div class="selectLotteryTicketNum_box_number">
+                                    <button v-for="(list,i) in 10" :key="i" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
+                                </div>
+                                <div class="filterNumber_box">
+                                    <button v-for="(m,j) in footerArr" :key="j" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
+                                </div>
+                            </div>
+                        </template>
+                        <template v-else-if="NavTwo_index==2">
+                            <div class="selectLotteryTicketNum_box">
+                                <div class="danshi">
+                                    单式
+                                </div>
+                            </div>
+                        </template>
+                </div>
                 <div class="gameCal">
                     <span class="gameCal_title">单注金额</span>
                     <input type="text" class="j_Amount"  v-model="oneMoney" onkeyup="value=value.replace(/[^0-9]/g,'')" onpaste="value=value.replace(/[^0-9]/g,'')" oncontextmenu="value=value.replace(/[^0-9]/g,'')">
@@ -160,16 +177,21 @@
     </div>
 </template>
 <script>
+import '@/assets/js/ssc.js'
+import { singleSelect,multipleSelect } from '@/assets/js/ssc.js'
 export default {
     name:'SSC',
     data(){
         return {
             NavOne_index:0,
             NavTwo_index:1,
+            NavOneData:null,
+            NavTwoData:null,
             moneyType:['元','角','分','厘'],
             setMoneyNumber_index:0,
             titleArr:['万位','千位','百位','十位','个位'],
             footerArr:['全','大','小','单','双','清'],
+            userArr:[],
             // 获取的数据
             data:{
                 lastOpenNumber:null, //近十期开奖号码数据
@@ -214,6 +236,7 @@ export default {
             return this.$store.state.specificTypeData;
         },
     },
+    
     methods:{
         myresize:function(){
             let jw = document.body.offsetWidth;
@@ -223,17 +246,27 @@ export default {
         },
         // 该事件将被兄弟组件触发
         bortherMethods:function(a){
-            // console.log(a);
+            // console.log(specificTypeData);
+        },
+        singleSelectFn(e,y,x){
+            singleSelect(e,y,x,this.$data);
+        },
+        multipleSelectFn(e,y,x){
+            multipleSelect(e,y,x,this.$data);
         },
         // 点击一级菜单选择的数据
         selectOneNav:function(i,data){
             this.NavOne_index = i;
             this.NavTwo_index = data.play_rule[0].odds[0].id;
+            this.bettingInfo.rate = data.play_rule[0].odds[0].rate;
+            this.NavOneData = data;
             console.log('NavOneData',data);
         },
         // 点击二级菜单选择的数据
         selectTwoNav:function(i,data){
             this.NavTwo_index = i;
+            this.bettingInfo.rate = data.rate;
+            this.NavTwoData = data;
             console.log('NavTwoData',data);
         },
         // 设置单笔投注金额
@@ -275,11 +308,13 @@ export default {
             this.bettingInfo.singleMoney = 2;
             this.setMoneyNumber_index = 0;
             this.bettingInfo.setMultipleNumber = 1;
+            this.userArr = [];
         },
         // 添加号码
         addNumber:function(e){
             // console.log(e);
         },
+        
         // 获取最近10期的开奖结果
         getRecentTotteryData:function(){
             this.$http({
@@ -383,7 +418,7 @@ export default {
     },
     mounted(){
         this.myresize();
-        this.getNextTotteryTime()
+        this.getNextTotteryTime();
     },
 }
 </script>
