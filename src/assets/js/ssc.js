@@ -1,4 +1,11 @@
 
+// 监听单式文本域输入
+function getTextareaData(e,me){
+    console.log(me.textareaData);
+};
+export{
+    getTextareaData
+}
 // 单选
 function singleSelect(e,y,x,me){
     if(!me.userArr[y]){
@@ -18,9 +25,26 @@ export{
 }
 // 多选
 function multipleSelect(e,y,x,me){
-    if(!me.userArr[y]){
-        me.userArr[y] = [];
+    me.userArr[y] = [];
+    if(x!=5){
+        me.DesignationArr[y].num = x;
+        for (let i = 0; i < 10; i++) {
+            if(x==0){
+                me.userArr[y].push(i);                
+            }else if(x==1 && i>4){
+                me.userArr[y].push(i);
+            }else if(x==2 && i<5){
+                me.userArr[y].push(i);
+            }else if(x==3 && i%2!=0){
+                me.userArr[y].push(i);
+            }else if(x==4 && i%2==0){
+                me.userArr[y].push(i);
+            }
+        }
+    }else{
+        me.DesignationArr[y].num = null;
     }
+    console.log(me.userArr)
 };
 export{
     multipleSelect

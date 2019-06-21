@@ -61,24 +61,27 @@
             <div class="betcenterContent_Nav_Subnavs_body_left">
                 <div class="selectLotteryTicketNum">
                     <!-- 五星 -->
-                        <template v-if="NavTwo_index==1">
-                            <div class="selectLotteryTicketNum_box" v-for="(k,index) in 5" :key="index">
-                                <div class="weishu">{{ titleArr[index] }}</div>
-                                <div class="selectLotteryTicketNum_box_number">
-                                    <button v-for="(list,i) in 10" :key="i" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
-                                </div>
-                                <div class="filterNumber_box">
-                                    <button v-for="(m,j) in footerArr" :key="j" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
-                                </div>
+                    <template v-if="NavTwo_index==1">
+                        <div class="selectLotteryTicketNum_box" v-for="(k,index) in 5" :key="index">
+                            <div class="weishu">{{ titleArr[index] }}</div>
+                            <div class="selectLotteryTicketNum_box_number">
+                                <template v-if="userArr[index]!=undefined">
+                                <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index][i]==i}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
+                                {{ userArr[index] }}
+                                </template>
                             </div>
-                        </template>
-                        <template v-else-if="NavTwo_index==2">
-                            <div class="selectLotteryTicketNum_box">
-                                <div class="danshi">
-                                    单式
-                                </div>
+                            <div class="filterNumber_box">
+                                <button v-for="(m,j) in footerArr" :key="j" :class="{'filterNumber_box_button':DesignationArr[index].num==j}" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
                             </div>
-                        </template>
+                        </div>
+                    </template>
+                    <template v-else-if="NavTwo_index==2">
+                        <div class="selectLotteryTicketNum_box">
+                            <div class="danshi">
+                                <textarea class="dantext" v-on:input="onTextareaData($event)" v-model="textareaData" cols="" rows=""></textarea>
+                            </div>
+                        </div>
+                    </template>
                 </div>
                 <div class="gameCal">
                     <span class="gameCal_title">单注金额</span>
@@ -178,7 +181,7 @@
 </template>
 <script>
 import '@/assets/js/ssc.js'
-import { singleSelect,multipleSelect } from '@/assets/js/ssc.js'
+import { singleSelect,multipleSelect,getTextareaData } from '@/assets/js/ssc.js'
 export default {
     name:'SSC',
     data(){
@@ -191,7 +194,7 @@ export default {
             setMoneyNumber_index:0,
             titleArr:['万位','千位','百位','十位','个位'],
             footerArr:['全','大','小','单','双','清'],
-            userArr:[],
+            userArr:[[],[],[],[],[]],
             // 获取的数据
             data:{
                 lastOpenNumber:null, //近十期开奖号码数据
@@ -214,6 +217,14 @@ export default {
             timeFn:null,
             lastTimeFn:null,
             forTime:3000,
+            textareaData:'', //单式文本域
+            DesignationArr:[
+                {'num':null},
+                {'num':null},
+                {'num':null},
+                {'num':null},
+                {'num':null},
+            ],
         }
     },
     components:{
@@ -248,9 +259,15 @@ export default {
         bortherMethods:function(a){
             // console.log(specificTypeData);
         },
+        // 监听文本域
+        onTextareaData(e){
+            getTextareaData(e,this.$data);
+        },
+        // 单选
         singleSelectFn(e,y,x){
             singleSelect(e,y,x,this.$data);
         },
+        // 多选
         multipleSelectFn(e,y,x){
             multipleSelect(e,y,x,this.$data);
         },
@@ -309,6 +326,10 @@ export default {
             this.setMoneyNumber_index = 0;
             this.bettingInfo.setMultipleNumber = 1;
             this.userArr = [];
+            this.textareaData = '';
+            for (let i = 0; i < 5; i++) {
+                this.DesignationArr[i].num = null;
+            }
         },
         // 添加号码
         addNumber:function(e){
@@ -425,6 +446,7 @@ export default {
 <style scoped>
 .betcenterContent_Nav_Subnavs_two{width: auto;margin: 12px 15px 12px 8px;}
 .betcenterContent_Nav_Subnavs_two>button{background-color: #fff;color: #2f2f2f;cursor: pointer;border-radius: 4px;border: 1px solid #dddddd;padding: 4px 12px;margin-right:5px;}
+.dantext{width: 98%;height: auto;min-height: 230px;max-height: 500px;resize:none;padding: 10px 1%;}
 </style>
 
 

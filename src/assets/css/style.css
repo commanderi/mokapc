@@ -1600,10 +1600,8 @@ footer{
     background-color: #fff;
     border-radius: 4px;
     position: absolute;
-    /* left: 50%; */
-    /* margin-left: -26%; */
     margin-bottom: 50px;
-    max-width: 1400px;
+    max-width: 1200px;
 }
 .betcenterContent_header{
     display: -ms-flexbox;
@@ -1683,7 +1681,9 @@ footer{
 .betcenterContent_header>:not(:first-child) {
     margin-left: 1rem;
 }
-
+.icon-shangla{
+    transform: rotate(180deg);
+}
 .PublicityNumberBox{
     display: -ms-flexbox;
     display: flex;
@@ -2371,10 +2371,11 @@ footer{
     -webkit-font-smoothing: inherit;
     letter-spacing: inherit;
     background: none;
-    cursor: pointer;
+    /* cursor: pointer; */
     padding: 0 5px;
     font-size: 12px;
     color: #4c4c4c;
+    transform: rotate(180deg);
 }
 .gameHistory_tableCell:nth-of-type(3){
     justify-content: flex-end;
@@ -5006,4 +5007,4 @@ footer{
 .gameHistory_number_k3_font{color: #4c4c4c;font-size: 12px;font-weight: 500;}
 .gameHistory_number_k3_font_top{color: #4c4c4c;font-size: 18px;font-weight: 500;}
 .set-center{align-items: center;}
-.danshi{width: 100%;height: auto;min-height: 200px;margin: 10px;}
+.danshi{width: 100%;height: auto;min-height: 230px;margin: 10px;}
