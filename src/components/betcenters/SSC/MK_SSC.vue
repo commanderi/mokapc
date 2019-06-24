@@ -65,9 +65,8 @@
                         <div class="selectLotteryTicketNum_box" v-for="(k,index) in 5" :key="index">
                             <div class="weishu">{{ titleArr[index] }}</div>
                             <div class="selectLotteryTicketNum_box_number">
-                                <template v-if="userArr[index]!=undefined">
-                                <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index][i]==i}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
-                                {{ userArr[index] }}
+                                <template v-if="userArr[index] != undefined">
+                                    <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
                                 </template>
                             </div>
                             <div class="filterNumber_box">

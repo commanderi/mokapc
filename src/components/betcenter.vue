@@ -10,7 +10,7 @@
                 <!-- pk10 -->
                 <PK10 v-if="showMe==3 || showMe==4" ref="borther"></PK10>
                 <!-- 时时彩 -->
-                <SSC v-else ref="borther"></SSC>
+                <SSC v-if='showMe && (showMe!=3 && showMe!=4)' ref="borther"></SSC>
             </template>
             <!-- 热门彩种表格 -->
             <betcenter-HotTable v-if="betcenter_Hot" v-on:controlHot="controlMe" v-on:transferTofather="fatherReceive"></betcenter-HotTable>
