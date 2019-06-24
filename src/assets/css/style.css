@@ -2085,7 +2085,7 @@ footer{
     background-color: #fff;
     height: 1.5rem;
     box-shadow: 0 2px 4px -1px rgba(76,76,76,.2), 0 4px 5px 0 rgba(76,76,76,.14), 0 1px 10px 0 rgba(76,76,76,.12);
-    min-width: 15%;
+    min-width: 6%;
     padding: 0 .5rem;
     color: #4c4c4c;
     line-height: 1;
@@ -2105,8 +2105,9 @@ footer{
 .cao_disabled{
     cursor: not-allowed;
     box-shadow: 0 0 0 0 rgba(76,76,76,.2), 0 0 0 0 rgba(76,76,76,.14), 0 0 0 0 rgba(76,76,76,.12);
-    color: hsla(0,0%,100%,.75);
+    color: rgba(255,255,255,0.75);
     background-color: #9a9a9a;
+    pointer-events: none;
 }
 .betResult{
     width: 100%;
@@ -2498,13 +2499,16 @@ footer{
 }
 .BettingBtn{
     margin-right: 12px;
+    pointer-events: none;
 }
 .BettingNullBtn{
     margin-left: 12px;
+    pointer-events: none;
 }
 .BettingBtn_yes{
     color: #4c4c4c!important;
     cursor: pointer!important;
+    pointer-events: auto!important;
 }
 .BettingBtn_yes:hover{
     color: #000!important;

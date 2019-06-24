@@ -84,16 +84,16 @@
                 </div>
                 <div class="gameCal">
                     <span class="gameCal_title">单注金额</span>
-                    <input type="text" class="j_Amount"  v-model="oneMoney" onkeyup="value=value.replace(/[^0-9]/g,'')" onpaste="value=value.replace(/[^0-9]/g,'')" oncontextmenu="value=value.replace(/[^0-9]/g,'')">
+                    <input type="text" class="j_Amount" v-on:input="ononeMoney($event)" v-model="oneMoney" onkeyup="value=value.replace(/[^0-9]/g,'')" onpaste="value=value.replace(/[^0-9]/g,'')" oncontextmenu="value=value.replace(/[^0-9]/g,'')">
                     <button v-for="(d,i) in moneyType" v-on:click="setMoneyNumber(i)" :class="['duan',setMoneyNumber_index==i ? 'duan_me' : '']" :key="i">{{ d }}</button>
                     <span class="gameCal_title">倍数</span>
                     <button class="num_jian center" v-on:click="setMultiple(0)"><i class="iconfont icon-sub lf_icon-sub"></i></button>
-                    <input type="text" min="1" max="9999" class="j_Amount" v-model="bettingInfo.setMultipleNumber" onkeyup="value=value.replace(/[^0-9]/g,'')" onpaste="value=value.replace(/[^0-9]/g,'')" oncontextmenu="value=value.replace(/[^0-9]/g,'')">
+                    <input type="text" min="1" max="9999" class="j_Amount" v-on:input="onsetMultipleNumber($event)" v-model="bettingInfo.setMultipleNumber" onkeyup="value=value.replace(/[^0-9]/g,'')" onpaste="value=value.replace(/[^0-9]/g,'')" oncontextmenu="value=value.replace(/[^0-9]/g,'')">
                     <button class="num_jia center" v-on:click="setMultiple(1)"><i class="iconfont icon-jiahao lf_icon-sub"></i></button>
+                    <button class="cao_btn" v-on:click="setMultiple(2)">加倍</button>
                     <div class="gameCal_ctrlBtns_1fAum">
                         <button class="cao_btn cao_claler" v-on:click="clearUserArr">清除</button>
-                        <button class="cao_btn" v-on:click="setMultiple(2)">加倍</button>
-                        <button class="cao_btn cao_disabled" id="addNumber" disabled v-on:click="addNumber($event)">添加</button>
+                        <button :class="['cao_btn',bettingInfo.bettingNumber>0?'':'cao_disabled']" v-on:click="addNumberBtn($event)">添加</button>
                     </div>
                 </div>
                 <div class="betResult">
@@ -103,15 +103,15 @@
                         <span>注数</span>
                         <span>倍数</span>
                         <span>金额</span>
-                        <span><button class="allClear">全清</button></span>
+                        <span><button class="allClear" v-on:click="clearmyJson">全清</button></span>
                     </div>
                     <ul class="betResultList_ul">
-                        <li class="clear" v-for="(item,index) in 10" :key="index">
-                            <span>{{ item }}</span>
-                            <span>{{ item }}</span>
-                            <span>{{ item }}</span>
-                            <span>{{ item }}</span>
-                            <span>{{ item }}</span>
+                        <li class="clear" v-for="(data,index) in myJson" :key="index">
+                            <span>{{ data.name }}</span>
+                            <span>{{ data.number }}</span>
+                            <span>{{ data.note }}</span>
+                            <span>{{ data.multiple }}</span>
+                            <span>{{ data.money }}</span>
                         </li>
                     </ul>
                 </div>
@@ -155,15 +155,11 @@
                 <div class="ratioCtrl">
                     <div class="ratioCtrl_paragraph">
                         <div class="ratioCtrl_label"><p>总注数</p></div>
-                        <div class="ratioCtrl_content"><p>4654564</p></div>
+                        <div class="ratioCtrl_content"><p>{{ bettingInfo.bettingNumber }}</p></div>
                     </div>
                     <div class="ratioCtrl_paragraph">
                         <div class="ratioCtrl_label"><p>总金额</p></div>
-                        <div class="ratioCtrl_content"><p>56546</p>元</div>
-                    </div>
-                    <div class="ratioCtrl_paragraph">
-                        <div class="ratioCtrl_label"><p>最高奖金</p></div>
-                        <div class="ratioCtrl_content"><p>465756</p>元</div>
+                        <div class="ratioCtrl_content"><p>{{ bettingInfo.allMoney }}</p>元</div>
                     </div>
                     <div class="ratioCtrl_paragraph">
                         <div class="ratioCtrl_label"><p>最高赔率</p></div>
@@ -171,8 +167,8 @@
                     </div>
                 </div>
                 <div class="betCenter_actionRow">
-                    <button class="BettingBtn" disabled >立即投注</button>
-                    <button class="BettingNullBtn" disabled>确认投注</button>
+                    <button :class="['BettingBtn',bettingInfo.bettingNumber>0?'BettingBtn_yes':'']" v-on:click="bettingBtn_direct">立即投注</button>
+                    <button :class="['BettingNullBtn',myJson.length>0?'BettingBtn_yes':'']" v-on:click="bettingBtn_confirm">确认投注</button>
                 </div>
             </div>
         </div>
@@ -180,15 +176,15 @@
 </template>
 <script>
 import '@/assets/js/ssc.js'
-import { singleSelect,multipleSelect,getTextareaData } from '@/assets/js/ssc.js'
+import { singleSelect,multipleSelect,getTextareaData,addNumber } from '@/assets/js/ssc.js'
 export default {
     name:'SSC',
     data(){
         return {
             NavOne_index:0,
             NavTwo_index:1,
-            NavOneData:null,
-            NavTwoData:null,
+            NavOneData:this.$store.state.specificTypeData[0].play_rule,//默认一级菜单数据
+            NavTwoData:this.$store.state.specificTypeData[0].play_rule[0].odds[0],//默认二级菜单数据
             moneyType:['元','角','分','厘'],
             setMoneyNumber_index:0,
             titleArr:['万位','千位','百位','十位','个位'],
@@ -208,11 +204,16 @@ export default {
             },
             // 投注信息
             bettingInfo:{
-                singleMoney:2, //单笔投注金额
+                number:'',
+                allMoney:0, //总金额
+                singleMoney:2, //单注金额
+                bettingNumber:0, //注数
                 setMultipleNumber:1, //投注倍数
-                rate:0, //赔率
+                rate:this.$store.state.specificTypeData[0].play_rule[0].odds[0].rate, //默认赔率
             },
-            oneMoney:2,
+            myJson:[], //确认投注的数据
+            myObj:null, //立即投注的数据
+            oneMoney:2,//可操作单注金额
             timeFn:null,
             lastTimeFn:null,
             forTime:3000,
@@ -262,6 +263,16 @@ export default {
         onTextareaData(e){
             getTextareaData(e,this.$data);
         },
+        // 监听单注金额input
+        ononeMoney(e){
+            console.log(e.data);
+            let reg = /^[1-9]+[0-9]*]*$/;
+            // this.bettingInfo.singleMoney = 2;
+        },
+        // 监听倍数input
+        onsetMultipleNumber(e){
+            console.log(e.data)            
+        },
         // 单选
         singleSelectFn(e,y,x){
             singleSelect(e,y,x,this.$data);
@@ -303,7 +314,7 @@ export default {
                     this.bettingInfo.singleMoney = singleMoney*0.001;
                 break;
             }
-            console.log(this.bettingInfo.singleMoney);
+            this.bettingInfo.allMoney = (this.bettingInfo.singleMoney*this.bettingInfo.bettingNumber)*this.bettingInfo.setMultipleNumber;
         },
         // 设置投注倍数
         setMultiple:function(num){
@@ -318,23 +329,37 @@ export default {
             }else{
                 this.bettingInfo.setMultipleNumber = this.bettingInfo.setMultipleNumber*2;
             }
+            this.bettingInfo.allMoney = (this.bettingInfo.singleMoney*this.bettingInfo.bettingNumber)*this.bettingInfo.setMultipleNumber;
         },
         // 清除选择的数据
         clearUserArr:function(){
-            this.bettingInfo.singleMoney = 2;
             this.setMoneyNumber_index = 0;
+            this.bettingInfo.allMoney = 0;
+            this.bettingInfo.singleMoney = 2;
+            this.bettingInfo.bettingNumber = 0;
             this.bettingInfo.setMultipleNumber = 1;
-            this.userArr = [];
+            this.userArr = [[],[],[],[],[]];
             this.textareaData = '';
             for (let i = 0; i < 5; i++) {
                 this.DesignationArr[i].num = null;
             }
         },
-        // 添加号码
-        addNumber:function(e){
-            // console.log(e);
+        clearmyJson:function(){
+            this.myJson = [];
         },
-        
+        // 添加号码
+        addNumberBtn:function(){
+            addNumber(this,2);
+        },
+        // 立即投注
+        bettingBtn_direct:function(){
+            addNumber(this,1);
+            console.log(this.myObj);
+        },
+        // 确认投注
+        bettingBtn_confirm:function(){
+            console.log(this.myJson)
+        },
         // 获取最近10期的开奖结果
         getRecentTotteryData:function(){
             this.$http({
