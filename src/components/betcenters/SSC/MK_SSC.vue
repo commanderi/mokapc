@@ -65,7 +65,7 @@
                         <div class="selectLotteryTicketNum_box" v-for="(k,index) in 5" :key="index">
                             <div class="weishu">{{ titleArr[index] }}</div>
                             <div class="selectLotteryTicketNum_box_number">
-                                <template v-if="userArr[index] != undefined">
+                                <template v-if="userArr[index]!=undefined">
                                     <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
                                 </template>
                             </div>
@@ -77,7 +77,36 @@
                     <template v-else-if="NavTwo_index==2">
                         <div class="selectLotteryTicketNum_box">
                             <div class="danshi">
-                                <textarea class="dantext" v-on:input="onTextareaData($event)" v-model="textareaData" cols="" rows=""></textarea>
+                                <textarea class="dantext" v-on:input="ontextareaData($event)" v-model="textareaData" cols="" rows=""></textarea>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else-if="NavTwo_index==3||NavTwo_index==4||NavTwo_index==5">
+                        <div class="selectLotteryTicketNum_box" v-for="(k,index) in 1" :key="index">
+                            <div class="weishu">选号</div>
+                            <div class="selectLotteryTicketNum_box_number">
+                                <template v-if="userArr[index]!=undefined">
+                                    <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
+                                </template>
+                            </div>
+                            <div class="filterNumber_box">
+                                <button v-for="(m,j) in footerArr" :key="j" :class="{'filterNumber_box_button':DesignationArr[index].num==j}" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else-if="NavTwo_index==6">
+                        <div class="selectLotteryTicketNum_box" v-for="(k,index) in 1" :key="index">
+                            <div class="weishu">和值</div>
+                            <div class="selectLotteryTicketNum_box_number">
+                                <template v-if="userArr[index]!=undefined">
+                                    <button v-for="(list,i) in ['大','小','单','双']" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ list }}</button>
+                                </template>
+                            </div>
+                            <div class="filterNumber_box">
+                                <template v-for="(m,j) in footerArr">
+                                    <button v-if="j==5" :key="j" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
+                                    <button v-else :key="j" class="filterNumber_box_button_no" disabled>{{ m }}</button>
+                                </template>
                             </div>
                         </div>
                     </template>
@@ -93,7 +122,7 @@
                     <button class="cao_btn" v-on:click="setMultiple(2)">加倍</button>
                     <div class="gameCal_ctrlBtns_1fAum">
                         <button class="cao_btn cao_claler" v-on:click="clearUserArr">清除</button>
-                        <button :class="['cao_btn',bettingInfo.bettingNumber>0?'':'cao_disabled']" v-on:click="addNumberBtn($event)">添加</button>
+                        <button :class="['cao_btn',bettingInfo.bettingNumber>0 || textareaData!=''?'':'cao_disabled']" v-on:click="addNumberBtn($event)">添加</button>
                     </div>
                 </div>
                 <div class="betResult">
@@ -176,7 +205,7 @@
 </template>
 <script>
 import '@/assets/js/ssc.js'
-import { singleSelect,multipleSelect,getTextareaData,addNumber } from '@/assets/js/ssc.js'
+import { singleSelect,singleSelectChinese,multipleSelect,getTextareaData,AssemblyData } from '@/assets/js/ssc.js'
 export default {
     name:'SSC',
     data(){
@@ -190,6 +219,7 @@ export default {
             titleArr:['万位','千位','百位','十位','个位'],
             footerArr:['全','大','小','单','双','清'],
             userArr:[[],[],[],[],[]],
+            userArrChinese:[],
             // 获取的数据
             data:{
                 lastOpenNumber:null, //近十期开奖号码数据
@@ -235,7 +265,7 @@ export default {
             clearInterval(this.lastTimeFn);
             clearInterval(this.timeFn);
             this.getNextTotteryTime();
-        }
+        },
     },
     computed:{
         // 选择的左侧大彩种
@@ -258,24 +288,42 @@ export default {
         // 该事件将被兄弟组件触发
         bortherMethods:function(a){
             // console.log(specificTypeData);
-        },
-        // 监听文本域
-        onTextareaData(e){
-            getTextareaData(e,this.$data);
-        },
+        },    
         // 监听单注金额input
         ononeMoney(e){
             console.log(e.data);
-            let reg = /^[1-9]+[0-9]*]*$/;
-            // this.bettingInfo.singleMoney = 2;
         },
         // 监听倍数input
         onsetMultipleNumber(e){
-            console.log(e.data)            
+            console.log(e.data)
+        },
+        // 添加号码
+        addNumberBtn:function(){
+            if(this.textareaData){
+                getTextareaData(this);
+            }else{
+                AssemblyData(this,2);
+            }
+        },
+        // 立即投注
+        bettingBtn_direct:function(){
+            AssemblyData(this,1);
+        },
+        // 确认投注
+        bettingBtn_confirm:function(){
+            console.log(this.myJson)
         },
         // 单选
         singleSelectFn(e,y,x){
-            singleSelect(e,y,x,this.$data);
+            switch (this.NavTwo_index) {
+                // 玩法是汉字的情况
+                case 6:
+                    singleSelectChinese(e,y,x,this.$data);
+                break;
+                default:
+                    singleSelect(e,y,x,this.$data);
+                break;
+            }
         },
         // 多选
         multipleSelectFn(e,y,x){
@@ -287,6 +335,7 @@ export default {
             this.NavTwo_index = data.play_rule[0].odds[0].id;
             this.bettingInfo.rate = data.play_rule[0].odds[0].rate;
             this.NavOneData = data;
+            this.clearUserArr();
             console.log('NavOneData',data);
         },
         // 点击二级菜单选择的数据
@@ -294,6 +343,7 @@ export default {
             this.NavTwo_index = i;
             this.bettingInfo.rate = data.rate;
             this.NavTwoData = data;
+            this.clearUserArr();
             console.log('NavTwoData',data);
         },
         // 设置单笔投注金额
@@ -340,6 +390,7 @@ export default {
             this.bettingInfo.setMultipleNumber = 1;
             this.userArr = [[],[],[],[],[]];
             this.textareaData = '';
+            this.userArrChinese = ''
             for (let i = 0; i < 5; i++) {
                 this.DesignationArr[i].num = null;
             }
@@ -347,19 +398,7 @@ export default {
         clearmyJson:function(){
             this.myJson = [];
         },
-        // 添加号码
-        addNumberBtn:function(){
-            addNumber(this,2);
-        },
-        // 立即投注
-        bettingBtn_direct:function(){
-            addNumber(this,1);
-            console.log(this.myObj);
-        },
-        // 确认投注
-        bettingBtn_confirm:function(){
-            console.log(this.myJson)
-        },
+        
         // 获取最近10期的开奖结果
         getRecentTotteryData:function(){
             this.$http({

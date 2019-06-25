@@ -1996,6 +1996,9 @@ footer{
     border: 0!important;
     box-shadow: 0 0 0 0 rgba(76,76,76,.2), 0 0 0 0 rgba(76,76,76,.14), 0 0 0 0 rgba(76,76,76,.12)!important;
 }
+.filterNumber_box_button_no{
+    cursor: not-allowed!important;
+}
 .gameCal{
     -ms-flex-line-pack: center;
     align-content: center;
