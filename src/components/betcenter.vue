@@ -92,7 +92,7 @@ export default {
         try {
             this.showMe = this.$store.state.specificTypeID[0]
         } catch (error) {
-            console.log('选择的奖项为',this.$store.state.specificTypeID);
+            // console.log('选择的奖项为',this.$store.state.specificTypeID);
         }
     }
 }

@@ -22,7 +22,7 @@ function getTextareaData(m){
     }
     me.userArr = spliceBetNumberArr(me.userArr,5);
     // 调用相关玩法的算法计算注数
-    switch (me.NavTwoData.id) {
+    switch (me.NavTwo_index) {
         case 2:
             me.bettingInfo.bettingNumber = me.userArr.length;
         break;
@@ -42,24 +42,23 @@ function singleSelect(e,y,x,me){
         me.userArr[y].splice($.inArray(x,me.userArr[y]),1);
     }
     // 调用相关玩法的算法计算注数
-    switch (me.NavTwoData.id) {
-        case 1:
-            me.bettingInfo.bettingNumber = getBettingNumber(me,me.NavTwoData.id);
+    switch (me.NavTwo_index) {
+        case 1:case 13:case 25:case 43:
+            me.bettingInfo.bettingNumber = getBettingNumber(me,me.NavTwo_index);
         break;
-        case 3:case 4:case 5:
-            // me.bettingInfo.bettingNumber = combination(me.userArr[y].length,1)
-            me.userArr[y].length<1 ? me.bettingInfo.bettingNumber=0 : me.bettingInfo.bettingNumber=Math.floor(combination(me.userArr[y].length,me.NavTwoData.id-2));
+        case 3:case 4:case 5:case 7:
+            me.userArr[y].length<1 ? me.bettingInfo.bettingNumber=0 : me.bettingInfo.bettingNumber=Math.floor(combination(me.userArr[y].length,me.NavTwo_index-2));
         break;
-        // case 4:
-        //     me.userArr[y].length<1 ? me.bettingInfo.bettingNumber=0 : me.bettingInfo.bettingNumber=combination(me.userArr[y].length,2);
-        // break;
-        // case 5:
-        //     me.userArr[y].length<1 ? me.bettingInfo.bettingNumber=0 : me.bettingInfo.bettingNumber=combination(me.userArr[y].length,3);
-        // break;
+        case 11:case 12: // 组选10、组选5
+            me.bettingInfo.bettingNumber = getBettingNumber10_15(me,me.NavTwo_index);
+        break;
+        case 8:case 9:case 10: // 组选60、组选30、组选20 需要算法
+            // me.bettingInfo.bettingNumber = (Math.floor(combination(me.userArr[0].length,1))*Math.floor(combination(me.userArr[1].length,3)));
+        break;
     }
     // 总金额=单注金额x注数x投注倍数
     me.bettingInfo.allMoney = (me.bettingInfo.singleMoney*me.bettingInfo.bettingNumber)*me.bettingInfo.setMultipleNumber;
-    console.log(me.userArr)
+    // console.log(me.userArr)
 };
 export{
     singleSelect
@@ -75,7 +74,6 @@ function singleSelectChinese(e,y,x,me){
     }
     me.bettingInfo.bettingNumber = me.userArrChinese.length;
     me.bettingInfo.allMoney = (me.bettingInfo.singleMoney*me.bettingInfo.bettingNumber)*me.bettingInfo.setMultipleNumber;
-
     console.log(me.userArrChinese);
 };
 export{
@@ -103,19 +101,16 @@ function multipleSelect(e,y,x,me){
         me.DesignationArr[y].num = null;
     }
     // 调用相关玩法的算法计算注数
-    switch (me.NavTwoData.id) {
+    switch (me.NavTwo_index) {
         case 1:
-            me.bettingInfo.bettingNumber = getBettingNumber(me,me.NavTwoData.id);
+            me.bettingInfo.bettingNumber = getBettingNumber(me,me.NavTwo_index);
         break;
-        case 3:case 4:case 5:
-            me.userArr[y].length<1 ? me.bettingInfo.bettingNumber=0 : me.bettingInfo.bettingNumber=combination(me.userArr[y].length,me.NavTwoData.id-2);
+        case 3:case 4:case 5:case 7:
+            me.userArr[y].length<1 ? me.bettingInfo.bettingNumber=0 : me.bettingInfo.bettingNumber=combination(me.userArr[y].length,me.NavTwo_index-2);
         break;
-        // case 4:
-        //     me.userArr[y].length<1 ? me.bettingInfo.bettingNumber=0 : me.bettingInfo.bettingNumber=combination(me.userArr[y].length,2);
-        // break;
-        // case 5:
-        //     me.userArr[y].length<1 ? me.bettingInfo.bettingNumber=0 : me.bettingInfo.bettingNumber=combination(me.userArr[y].length,3);
-        // break;
+        case 11:case 12: // 组选10、组选5
+            me.bettingInfo.bettingNumber = getBettingNumber10_15(me,me.NavTwo_index);
+        break;
     }
     // 总金额=单注金额x注数x投注倍数
     me.bettingInfo.allMoney = (me.bettingInfo.singleMoney*me.bettingInfo.bettingNumber)*me.bettingInfo.setMultipleNumber;
@@ -138,17 +133,17 @@ function AssemblyData(m,num){
             xuanzheData[i] = me.userArr[i];
         }
     }
-    successData = (xuanzheData.join('|')).replace(/,/g,' ');    
-    switch (me.NavTwoData.id) {
-        case 25: //有选择'万千百十个'的情况
+    successData = (xuanzheData.join('|')).replace(/,/g,' ');
+    switch (me.NavTwo_index) {
+        case 63:case 64:case 66:case 67:case 68:case 69:case 71: //有选择'万千百十个'的情况
             for (let j = 0; j < this.ifarr.length; j++) {
                 rr += ' '+title[this.ifarr[j]];
             }
             successData = rr+':'+successData;
         break;
-        case 3:case 4:case 5:
+        case 3:case 4:case 5:case 7:
             for (let j = 0; j < successData.length; j++) {
-                successData = successData.replace('|','');                
+                successData = successData.replace('|','');
             }
         break
         case 6:
@@ -158,13 +153,13 @@ function AssemblyData(m,num){
     list = {
         number:successData,
         odd_play:me.NavTwoData.odd_play,
-        odd_id:me.NavTwoData.id,
+        odd_id:me.NavTwo_index,
         note:me.bettingInfo.bettingNumber,
         money:me.bettingInfo.allMoney,
         one_money:me.bettingInfo.singleMoney,
         rate:me.bettingInfo.rate,
         multiple:me.bettingInfo.setMultipleNumber,
-        name:me.NavOneData[me.NavOne_index].title+'-'+me.NavTwoData.rule,
+        name:me.NavOneData.name+'-'+me.NavTwoData.rule,
     };
     if(num==1){
         me.myObj = list;
@@ -176,22 +171,41 @@ function AssemblyData(m,num){
 export{
     AssemblyData
 }
-
-// 五星算法
-function getBettingNumber(me,play){
+// 组选10、组选5
+function getBettingNumber10_15(me,id){
     let num = [];
     if(me.userArr[0]!=null||me.userArr[0]!=undefined){
         for (let i = 0; i < me.userArr[0].length; i++) {
             if(me.userArr[1]!=null||me.userArr[1]!=undefined){
                 for (let j = 0; j < me.userArr[1].length; j++) {
-                    if(play==12||play==16||play==18){
+                    if(id==11||id==12){ //组选10、组选5
+                        let dusi = me.userArr[0][i];
+                        let dusj = me.userArr[1][j];
+                        if(dusi!=dusj){
+                            num.push(dusi+','+dusj);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return num.length;
+};
+// 五星算法
+function getBettingNumber(me,id){
+    let num = [];
+    if(me.userArr[0]!=null||me.userArr[0]!=undefined){
+        for (let i = 0; i < me.userArr[0].length; i++) {
+            if(me.userArr[1]!=null||me.userArr[1]!=undefined){
+                for (let j = 0; j < me.userArr[1].length; j++) {
+                    if(id==43||id==49){ //二星
                         let dusi = me.userArr[0][i];
                         let dusj = me.userArr[1][j];
                         num.push(dusi+','+dusj);
                     }else{
                         if(me.userArr[2]!=null||me.userArr[2]!=undefined){
                             for (let k = 0; k < me.userArr[2].length; k++) {
-                                if(play==6||play==17||play==19){
+                                if(id==25||id==31||id==37){ //三星
                                     let dusi = me.userArr[0][i];
                                     let dusj = me.userArr[1][j];
                                     let dusk = me.userArr[2][k];
@@ -199,14 +213,22 @@ function getBettingNumber(me,play){
                                 }else{
                                     if(me.userArr[3]!=null||me.userArr[3]!=undefined){
                                         for (let a = 0; a < me.userArr[3].length; a++) {
-                                            if(me.userArr[4]!=null||me.userArr[4]!=undefined){
-                                                for (let b = 0; b < me.userArr[4].length; b++) {
-                                                    let dusi = me.userArr[0][i];
-                                                    let dusj = me.userArr[1][j];
-                                                    let dusk = me.userArr[2][k];
-                                                    let dusa = me.userArr[3][a];
-                                                    let dusb = me.userArr[4][b];
-                                                    num.push(dusi+','+dusj+','+dusk+','+dusa+','+dusb);
+                                            if(id==13){ //四星
+                                                let dusi = me.userArr[0][i];
+                                                let dusj = me.userArr[1][j];
+                                                let dusk = me.userArr[2][k];
+                                                let dusa = me.userArr[3][a];
+                                                num.push(dusi+','+dusj+','+dusk+','+dusa);
+                                            }else{ //五星
+                                                if(me.userArr[4]!=null||me.userArr[4]!=undefined){
+                                                    for (let b = 0; b < me.userArr[4].length; b++) {
+                                                        let dusi = me.userArr[0][i];
+                                                        let dusj = me.userArr[1][j];
+                                                        let dusk = me.userArr[2][k];
+                                                        let dusa = me.userArr[3][a];
+                                                        let dusb = me.userArr[4][b];
+                                                        num.push(dusi+','+dusj+','+dusk+','+dusa+','+dusb);
+                                                    }
                                                 }
                                             }
                                         }

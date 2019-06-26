@@ -59,8 +59,8 @@
         <div class="betcenterContent_Nav_Subnavs_body">
             <!-- 主体左边 -->
             <div class="betcenterContent_Nav_Subnavs_body_left">
-                <div class="selectLotteryTicketNum">
-                    <!-- 五星 -->
+                <!-- 五星 -->
+                <div class="selectLotteryTicketNum" v-show="NavOne_index==0">
                     <template v-if="NavTwo_index==1">
                         <div class="selectLotteryTicketNum_box" v-for="(k,index) in 5" :key="index">
                             <div class="weishu">{{ titleArr[index] }}</div>
@@ -81,7 +81,7 @@
                             </div>
                         </div>
                     </template>
-                    <template v-else-if="NavTwo_index==3||NavTwo_index==4||NavTwo_index==5">
+                    <template v-else-if="NavTwo_index==3||NavTwo_index==4||NavTwo_index==5||NavTwo_index==7">
                         <div class="selectLotteryTicketNum_box" v-for="(k,index) in 1" :key="index">
                             <div class="weishu">选号</div>
                             <div class="selectLotteryTicketNum_box_number">
@@ -107,6 +107,104 @@
                                     <button v-if="j==5" :key="j" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
                                     <button v-else :key="j" class="filterNumber_box_button_no" disabled>{{ m }}</button>
                                 </template>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else-if="NavTwo_index==8||NavTwo_index==9||NavTwo_index==10||NavTwo_index==11||NavTwo_index==12">
+                        <div class="selectLotteryTicketNum_box" v-for="(k,index) in 2" :key="index">
+                            <div class="weishu" v-if="NavTwo_index==10">{{ k==1 ? '三重号' : '单　号' }}</div>
+                            <div class="weishu" v-else-if="NavTwo_index==11">{{ k==1 ? '三重号' : '二重号' }}</div>
+                            <div class="weishu" v-else-if="NavTwo_index==12">{{ k==1 ? '四重号' : '单　号' }}</div>
+                            <div class="weishu" v-else>{{ k==1 ? '二重号' : '单　号' }}</div>
+                            <div class="selectLotteryTicketNum_box_number">
+                                <template v-if="userArr[index]!=undefined">
+                                    <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
+                                </template>
+                            </div>
+                            <div class="filterNumber_box">
+                                <button v-for="(m,j) in footerArr" :key="j" :class="{'filterNumber_box_button':DesignationArr[index].num==j}" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <!-- 四星 -->
+                <div class="selectLotteryTicketNum" v-show="NavOne_index==1">
+                    <template v-if="NavTwo_index==13||NavTwo_index==19">
+                        <div class="selectLotteryTicketNum_box" v-for="(k,index) in 4" :key="index">
+                            <div class="weishu">{{ titleArr[index+1] }}</div>
+                            <div class="selectLotteryTicketNum_box_number">
+                                <template v-if="userArr[index]!=undefined">
+                                    <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
+                                </template>
+                            </div>
+                            <div class="filterNumber_box">
+                                <button v-for="(m,j) in footerArr" :key="j" :class="{'filterNumber_box_button':DesignationArr[index].num==j}" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else-if="NavTwo_index==14||NavTwo_index==20">
+                        <div class="selectLotteryTicketNum_box">
+                            <div class="danshi">
+                                <textarea class="dantext" v-on:input="ontextareaData($event)" v-model="textareaData" cols="" rows=""></textarea>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else-if="NavTwo_index==15||NavTwo_index==21||NavTwo_index==17||NavTwo_index==23">
+                        <div class="selectLotteryTicketNum_box" v-for="(k,index) in 1" :key="index">
+                            <div class="weishu">{{ NavTwo_index==15||NavTwo_index==21 ? '选号' : '二重号' }}</div>
+                            <div class="selectLotteryTicketNum_box_number">
+                                <template v-if="userArr[index]!=undefined">
+                                    <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
+                                </template>
+                            </div>
+                            <div class="filterNumber_box">
+                                <button v-for="(m,j) in footerArr" :key="j" :class="{'filterNumber_box_button':DesignationArr[index].num==j}" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else-if="NavTwo_index==16||NavTwo_index==22||NavTwo_index==18||NavTwo_index==24">
+                        <div class="selectLotteryTicketNum_box" v-for="(k,index) in 2" :key="index">
+                            <div class="weishu" v-if="NavTwo_index==16||NavTwo_index==22">{{ k==1 ? '二重号' : '单　号' }}</div>
+                            <div class="weishu" v-else>{{ k==1 ? '三重号' : '单　号' }}</div>
+                            <div class="selectLotteryTicketNum_box_number">
+                                <template v-if="userArr[index]!=undefined">
+                                    <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
+                                </template>
+                            </div>
+                            <div class="filterNumber_box">
+                                <button v-for="(m,j) in footerArr" :key="j" :class="{'filterNumber_box_button':DesignationArr[index].num==j}" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <!-- 三星 -->
+                <div class="selectLotteryTicketNum" v-show="NavOne_index==2||NavOne_index==3||NavOne_index==4">
+                    <template v-if="NavTwo_index==25">
+                        <div class="selectLotteryTicketNum_box" v-for="(k,index) in 3" :key="index">
+                            <div class="weishu">{{ titleArr[index+2] }}</div>
+                            <div class="selectLotteryTicketNum_box_number">
+                                <template v-if="userArr[index]!=undefined">
+                                    <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
+                                </template>
+                            </div>
+                            <div class="filterNumber_box">
+                                <button v-for="(m,j) in footerArr" :key="j" :class="{'filterNumber_box_button':DesignationArr[index].num==j}" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <!-- 二星 -->
+                <div class="selectLotteryTicketNum" v-show="NavOne_index==5">
+                    <template v-if="NavTwo_index==43">
+                        <div class="selectLotteryTicketNum_box" v-for="(k,index) in 2" :key="index">
+                            <div class="weishu">{{ titleArr[index+2] }}</div>
+                            <div class="selectLotteryTicketNum_box_number">
+                                <template v-if="userArr[index]!=undefined">
+                                    <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
+                                </template>
+                            </div>
+                            <div class="filterNumber_box">
+                                <button v-for="(m,j) in footerArr" :key="j" :class="{'filterNumber_box_button':DesignationArr[index].num==j}" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
                             </div>
                         </div>
                     </template>
@@ -212,7 +310,7 @@ export default {
         return {
             NavOne_index:0,
             NavTwo_index:1,
-            NavOneData:this.$store.state.specificTypeData[0].play_rule,//默认一级菜单数据
+            NavOneData:this.$store.state.specificTypeData[0],//默认一级菜单数据
             NavTwoData:this.$store.state.specificTypeData[0].play_rule[0].odds[0],//默认二级菜单数据
             moneyType:['元','角','分','厘'],
             setMoneyNumber_index:0,
@@ -277,7 +375,6 @@ export default {
             return this.$store.state.specificTypeData;
         },
     },
-    
     methods:{
         myresize:function(){
             let jw = document.body.offsetWidth;
@@ -327,7 +424,15 @@ export default {
         },
         // 多选
         multipleSelectFn(e,y,x){
-            multipleSelect(e,y,x,this.$data);
+            switch (this.NavTwo_index) {
+                case 6:
+                    this.clearUserArr();
+                    this.userArrChinese = [];
+                break;
+                default:
+                    multipleSelect(e,y,x,this.$data);
+                break;
+            }
         },
         // 点击一级菜单选择的数据
         selectOneNav:function(i,data){
@@ -390,7 +495,7 @@ export default {
             this.bettingInfo.setMultipleNumber = 1;
             this.userArr = [[],[],[],[],[]];
             this.textareaData = '';
-            this.userArrChinese = ''
+            this.userArrChinese = [];
             for (let i = 0; i < 5; i++) {
                 this.DesignationArr[i].num = null;
             }
