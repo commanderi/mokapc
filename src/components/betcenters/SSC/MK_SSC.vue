@@ -151,7 +151,7 @@
                     </template>
                     <template v-else-if="NavTwo_index==15||NavTwo_index==21||NavTwo_index==17||NavTwo_index==23">
                         <div class="selectLotteryTicketNum_box" v-for="(k,index) in 1" :key="index">
-                            <div class="weishu">{{ NavTwo_index==15||NavTwo_index==21 ? '选号' : '二重号' }}</div>
+                            <div class="weishu">{{ NavTwo_index==15||NavTwo_index==21 ? '选  号' : '二重号' }}</div>
                             <div class="selectLotteryTicketNum_box_number">
                                 <template v-if="userArr[index]!=undefined">
                                     <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
@@ -179,9 +179,108 @@
                 </div>
                 <!-- 三星 -->
                 <div class="selectLotteryTicketNum" v-show="NavOne_index==2||NavOne_index==3||NavOne_index==4">
-                    <template v-if="NavTwo_index==25">
+                    <template v-if="NavTwo_index==25||NavTwo_index==31||NavTwo_index==37">
                         <div class="selectLotteryTicketNum_box" v-for="(k,index) in 3" :key="index">
-                            <div class="weishu">{{ titleArr[index+2] }}</div>
+                            <div class="weishu" v-if="NavTwo_index==25">{{ titleArr[index+2] }}</div>
+                            <div class="weishu" v-else-if="NavTwo_index==31">{{ titleArr[index+1] }}</div>
+                            <div class="weishu" v-else-if="NavTwo_index==37">{{ titleArr[index] }}</div>
+                            <div class="selectLotteryTicketNum_box_number">
+                                <template v-if="userArr[index]!=undefined">
+                                    <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
+                                </template>
+                            </div>
+                            <div class="filterNumber_box">
+                                <button v-for="(m,j) in footerArr" :key="j" :class="{'filterNumber_box_button':DesignationArr[index].num==j}" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else-if="NavTwo_index==26||NavTwo_index==32||NavTwo_index==38">
+                        <div class="selectLotteryTicketNum_box">
+                            <div class="danshi">
+                                <textarea class="dantext" v-on:input="ontextareaData($event)" v-model="textareaData" cols="" rows=""></textarea>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-if="NavTwo_index==27||NavTwo_index==33||NavTwo_index==39">
+                        <div class="selectLotteryTicketNum_box" v-for="(k,index) in 1" :key="index">
+                            <div class="selectLotteryTicketNum_box_number">
+                                <template v-if="userArr[index]!=undefined">
+                                    <button v-for="(list,i) in 28" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-if="NavTwo_index==28||NavTwo_index==29||NavTwo_index==34||NavTwo_index==35||NavTwo_index==40||NavTwo_index==41">
+                        <div class="selectLotteryTicketNum_box" v-for="(k,index) in 1" :key="index">
+                            <div class="weishu">{{ NavTwo_index==28||NavTwo_index==34||NavTwo_index==40?'组三':'组六' }}</div>
+                            <div class="selectLotteryTicketNum_box_number">
+                                <template v-if="userArr[index]!=undefined">
+                                    <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
+                                </template>
+                            </div>
+                            <div class="filterNumber_box">
+                                <button v-for="(m,j) in footerArr" :key="j" :class="{'filterNumber_box_button':DesignationArr[index].num==j}" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else-if="NavTwo_index==30||NavTwo_index==36||NavTwo_index==42">
+                        <div class="selectLotteryTicketNum_box">
+                            <div class="danshi">
+                                <textarea class="dantext" v-on:input="ontextareaData($event)" v-model="textareaData" cols="" rows=""></textarea>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <!-- 二星 -->
+                <div class="selectLotteryTicketNum" v-show="NavOne_index==5||NavOne_index==6">
+                    <template v-if="NavTwo_index==43||NavTwo_index==49">
+                        <div class="selectLotteryTicketNum_box" v-for="(k,index) in 2" :key="index">
+                            <div class="weishu">{{ NavTwo_index==43 ? titleArr[index+3] : titleArr[index] }}</div>
+                            <div class="selectLotteryTicketNum_box_number">
+                                <template v-if="userArr[index]!=undefined">
+                                    <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
+                                </template>
+                            </div>
+                            <div class="filterNumber_box">
+                                <button v-for="(m,j) in footerArr" :key="j" :class="{'filterNumber_box_button':DesignationArr[index].num==j}" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else-if="NavTwo_index==44||NavTwo_index==48||NavTwo_index==50||NavTwo_index==54">
+                        <div class="selectLotteryTicketNum_box">
+                            <div class="danshi">
+                                <textarea class="dantext" v-on:input="ontextareaData($event)" v-model="textareaData" cols="" rows=""></textarea>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else-if="NavTwo_index==45||NavTwo_index==51">
+                        <div class="selectLotteryTicketNum_box" v-for="(k,index) in 1" :key="index">
+                            <div class="selectLotteryTicketNum_box_number">
+                                <template v-if="userArr[index]!=undefined">
+                                    <button v-for="(list,i) in 19" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else-if="NavTwo_index==46||NavTwo_index==52">
+                        <div class="selectLotteryTicketNum_box" v-for="(k,index) in 2" :key="index">
+                            <div class="weishu">{{ NavTwo_index==46 ? titleArr[index+3] : titleArr[index] }}</div>
+                            <div class="selectLotteryTicketNum_box_number">
+                                <template v-if="userArr[index]!=undefined">
+                                    <button v-for="(list,i) in ['大','小','单','双']" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ list }}</button>
+                                </template>
+                            </div>
+                            <div class="filterNumber_box">
+                                <template v-for="(m,j) in footerArr">
+                                    <button v-if="j==5" :key="j" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
+                                    <button v-else :key="j" class="filterNumber_box_button_no" disabled>{{ m }}</button>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-if="NavTwo_index==47||NavTwo_index==53">
+                        <div class="selectLotteryTicketNum_box" v-for="(k,index) in 1" :key="index">
+                            <div class="weishu">组选</div>
                             <div class="selectLotteryTicketNum_box_number">
                                 <template v-if="userArr[index]!=undefined">
                                     <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
@@ -193,11 +292,39 @@
                         </div>
                     </template>
                 </div>
-                <!-- 二星 -->
-                <div class="selectLotteryTicketNum" v-show="NavOne_index==5">
-                    <template v-if="NavTwo_index==43">
-                        <div class="selectLotteryTicketNum_box" v-for="(k,index) in 2" :key="index">
-                            <div class="weishu">{{ titleArr[index+2] }}</div>
+                <!-- 定位胆 -->
+                <div class="selectLotteryTicketNum" v-show="NavOne_index==7">
+                    <div class="selectLotteryTicketNum_box" v-for="(k,index) in 5" :key="index">
+                        <div class="weishu">{{ titleArr[index] }}</div>
+                        <div class="selectLotteryTicketNum_box_number">
+                            <template v-if="userArr[index]!=undefined">
+                                <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
+                            </template>
+                        </div>
+                        <div class="filterNumber_box">
+                            <button v-for="(m,j) in footerArr" :key="j" :class="{'filterNumber_box_button':DesignationArr[index].num==j}" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- 不定胆 -->
+                <div class="selectLotteryTicketNum" v-show="NavOne_index==8">
+                    <div class="selectLotteryTicketNum_box" v-for="(k,index) in 1" :key="index">
+                        <div class="weishu">不定胆</div>
+                        <div class="selectLotteryTicketNum_box_number">
+                            <template v-if="userArr[index]!=undefined">
+                                <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
+                            </template>
+                        </div>
+                        <div class="filterNumber_box">
+                            <button v-for="(m,j) in footerArr" :key="j" :class="{'filterNumber_box_button':DesignationArr[index].num==j}" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- 任二 -->
+                <div class="selectLotteryTicketNum" v-show="NavOne_index==9">
+                    <template v-if="NavTwo_index==62">
+                        <div class="selectLotteryTicketNum_box" v-for="(k,index) in 5" :key="index">
+                            <div class="weishu">{{ titleArr[index] }}</div>
                             <div class="selectLotteryTicketNum_box_number">
                                 <template v-if="userArr[index]!=undefined">
                                     <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
@@ -317,7 +444,7 @@ export default {
             titleArr:['万位','千位','百位','十位','个位'],
             footerArr:['全','大','小','单','双','清'],
             userArr:[[],[],[],[],[]],
-            userArrChinese:[],
+            userArrChinese:[[],[]],
             // 获取的数据
             data:{
                 lastOpenNumber:null, //近十期开奖号码数据
@@ -414,7 +541,7 @@ export default {
         singleSelectFn(e,y,x){
             switch (this.NavTwo_index) {
                 // 玩法是汉字的情况
-                case 6:
+                case 6:case 46:case 52:
                     singleSelectChinese(e,y,x,this.$data);
                 break;
                 default:
@@ -427,7 +554,7 @@ export default {
             switch (this.NavTwo_index) {
                 case 6:
                     this.clearUserArr();
-                    this.userArrChinese = [];
+                    this.userArrChinese = [[],[]];
                 break;
                 default:
                     multipleSelect(e,y,x,this.$data);
@@ -495,7 +622,7 @@ export default {
             this.bettingInfo.setMultipleNumber = 1;
             this.userArr = [[],[],[],[],[]];
             this.textareaData = '';
-            this.userArrChinese = [];
+            this.userArrChinese = [[],[]];
             for (let i = 0; i < 5; i++) {
                 this.DesignationArr[i].num = null;
             }
