@@ -320,9 +320,10 @@
                         </div>
                     </div>
                 </div>
-                <!-- 任二 -->
-                <div class="selectLotteryTicketNum" v-show="NavOne_index==9">
-                    <template v-if="NavTwo_index==62">
+                <!-- 任选234 -->
+                <div class="selectLotteryTicketNum" v-show="NavOne_index==9||NavOne_index==10||NavOne_index==11">
+                    <!-- 任选234复式 -->
+                    <template v-if="NavTwo_index==62||NavTwo_index==65||NavTwo_index==70">
                         <div class="selectLotteryTicketNum_box" v-for="(k,index) in 5" :key="index">
                             <div class="weishu">{{ titleArr[index] }}</div>
                             <div class="selectLotteryTicketNum_box_number">
@@ -335,6 +336,62 @@
                             </div>
                         </div>
                     </template>
+                    <!-- 任选23单式 -->
+                    <template v-if="NavTwo_index==63||NavTwo_index==66||NavTwo_index==69||NavTwo_index==71">
+                        <div class="lf_tt">
+                            <button class="gameOpenOption" v-for="(a,b) in titleArr" :key="b" v-on:click="selectClassFn($event,b)">
+                                <i :class="['iconfont',rxArr.indexOf(b)===-1 ? 'icon-yuan' : 'icon-103-copy']"></i>{{ a }}
+                            </button>
+                        </div>
+                        <div class="selectLotteryTicketNum_box" v-for="(k,index) in 1" :key="index">
+                            <div class="danshi">
+                                <textarea class="dantext" v-on:input="ontextareaData($event)" v-model="textareaData" cols="" rows=""></textarea>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-if="NavTwo_index==64||NavTwo_index==67||NavTwo_index==68">
+                        <div class="lf_tt">
+                            <button class="gameOpenOption" v-for="(a,b) in titleArr" :key="b" v-on:click="selectClassFn($event,b)">
+                                <i :class="['iconfont',rxArr.indexOf(b)===-1 ? 'icon-yuan' : 'icon-103-copy']"></i>{{ a }}
+                            </button>
+                        </div>
+                        <div class="selectLotteryTicketNum_box" v-for="(k,index) in 1" :key="index">
+                            <div class="weishu">组选</div>
+                            <div class="selectLotteryTicketNum_box_number">
+                                <template v-if="userArr[index]!=undefined">
+                                    <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
+                                </template>
+                            </div>
+                            <div class="filterNumber_box">
+                                <button v-for="(m,j) in footerArr" :key="j" :class="{'filterNumber_box_button':DesignationArr[index].num==j}" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <!-- 趣味 -->
+                <div class="selectLotteryTicketNum" v-show="NavOne_index==12">
+                    <div class="selectLotteryTicketNum_box" v-for="(k,index) in 1" :key="index">
+                        <div class="weishu">选号</div>
+                        <div class="selectLotteryTicketNum_box_number">
+                            <template v-if="userArr[index]!=undefined">
+                                <button v-for="(list,i) in 10" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ i }}</button>
+                            </template>
+                        </div>
+                        <div class="filterNumber_box">
+                            <button v-for="(m,j) in footerArr" :key="j" :class="{'filterNumber_box_button':DesignationArr[index].num==j}" v-on:click="multipleSelectFn($event,index,j)">{{ m }}</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- 龙虎 -->
+                <div class="selectLotteryTicketNum" v-show="NavOne_index==13">
+                    <div class="selectLotteryTicketNum_box" v-for="(k,index) in 1" :key="index">
+                        <div class="weishu">龙虎</div>
+                        <div class="selectLotteryTicketNum_box_number">
+                            <template v-if="userArr[index]!=undefined">
+                                <button v-for="(list,i) in ['龙','虎','和']" :key="i" :class="{'filterNumber_box_button':userArr[index].indexOf(i)>-1}" v-on:click="singleSelectFn($event,index,i)">{{ list }}</button>
+                            </template>
+                        </div>
+                    </div>
                 </div>
                 <div class="gameCal">
                     <span class="gameCal_title">单注金额</span>
@@ -430,7 +487,7 @@
 </template>
 <script>
 import '@/assets/js/ssc.js'
-import { singleSelect,singleSelectChinese,multipleSelect,getTextareaData,AssemblyData } from '@/assets/js/ssc.js'
+import { singleSelect,singleSelectChinese,multipleSelect,getTextareaData,AssemblyData,selectClass } from '@/assets/js/ssc.js'
 export default {
     name:'SSC',
     data(){
@@ -445,6 +502,7 @@ export default {
             footerArr:['全','大','小','单','双','清'],
             userArr:[[],[],[],[],[]],
             userArrChinese:[[],[]],
+            rxArr:[], //任选
             // 获取的数据
             data:{
                 lastOpenNumber:null, //近十期开奖号码数据
@@ -467,7 +525,7 @@ export default {
                 rate:this.$store.state.specificTypeData[0].play_rule[0].odds[0].rate, //默认赔率
             },
             myJson:[], //确认投注的数据
-            myObj:null, //立即投注的数据
+            myObj:[], //立即投注的数据
             oneMoney:2,//可操作单注金额
             timeFn:null,
             lastTimeFn:null,
@@ -529,19 +587,27 @@ export default {
                 AssemblyData(this,2);
             }
         },
+        ontextareaData:function(e){
+            console.log(e.data);
+        },
         // 立即投注
         bettingBtn_direct:function(){
             AssemblyData(this,1);
+            this.nowBetting();
         },
         // 确认投注
         bettingBtn_confirm:function(){
-            console.log(this.myJson)
+            this.yesBetting();
+        },
+        // 任选234
+        selectClassFn:function(e,index){
+            selectClass(e,index,this.$data);
         },
         // 单选
         singleSelectFn(e,y,x){
             switch (this.NavTwo_index) {
                 // 玩法是汉字的情况
-                case 6:case 46:case 52:
+                case 6:case 46:case 52:case 81:case 82:case 83:case 84:case 85:case 86:case 87:case 88:case 89:case 90:
                     singleSelectChinese(e,y,x,this.$data);
                 break;
                 default:
@@ -623,6 +689,20 @@ export default {
             this.userArr = [[],[],[],[],[]];
             this.textareaData = '';
             this.userArrChinese = [[],[]];
+            switch (this.NavTwo_index) {
+                case 63:case 64: //任选2默认选中的
+                    this.rxArr = [3,4];
+                break;
+                case 66:case 67:case 68:case 69: //任选3默认选中的
+                    this.rxArr = [2,3,4];
+                break;
+                case 71: //任选4默认选中的
+                    this.rxArr = [1,2,3,4];
+                break;
+                default:
+                    this.rxArr = [];
+                break;
+            };
             for (let i = 0; i < 5; i++) {
                 this.DesignationArr[i].num = null;
             }
@@ -630,7 +710,64 @@ export default {
         clearmyJson:function(){
             this.myJson = [];
         },
-        
+        // 确认投注
+        yesBetting:function(){
+            if(localStorage.getItem('loginStatus')=='true'){
+                // 选择了多个之后，并已经添加到底部，开始投注
+                let userToken = localStorage.getItem('userToken');
+                let uid = localStorage.getItem('userId');
+                this.$http({
+                    method: 'post',
+                    url: this.$store.state.postUrl+'lottery/betting',
+                    data:{'cate':this.$store.state.specificTypeID[0],'list':JSON.stringify(this.myJson),'uid':uid,'token':userToken}
+                })
+                .then(res => {
+                    if(res.data.ret==200){
+                        layer.msg(res.data.msg);
+                        // this.clearUserArr();
+                        this.clearmyJson();
+                    }else{
+                        layer.msg(res.data.msg);
+                    }
+                })
+                .catch(err => {
+                    layer.msg('投注出错,请重试:'+err);
+                })
+            }else{
+                layer.msg('未登录，无法投注');
+            }
+        },
+        // 立即投注
+        nowBetting:function(){
+            if(localStorage.getItem('loginStatus')=='true'){
+                let userToken = localStorage.getItem('userToken');
+                let uid = localStorage.getItem('userId');
+                if(this.myObj==null||this.myObj==''){
+                    layer.msg('选择的数据不能为空');
+                    return
+                }else{
+                    this.$http({
+                        method: 'post',
+                        url: this.$store.state.postUrl+'lottery/betting',
+                        data:{'cate':this.$store.state.specificTypeID[0],'list':JSON.stringify(this.myObj),'uid':uid,'token':userToken}
+                    })
+                    .then(res => {
+                        if(res.data.ret==200){
+                            layer.msg(res.data.msg);
+                            this.clearUserArr();
+                            this.myObj = [];
+                        }else{
+                            layer.msg(res.data.msg);
+                        }
+                    })
+                    .catch(err => {
+                        layer.msg('投注出错,请重试:'+err);
+                    })
+                }
+            }else{
+                layer.msg('未登录，无法投注');
+            }
+        },
         // 获取最近10期的开奖结果
         getRecentTotteryData:function(){
             this.$http({
