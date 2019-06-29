@@ -2,39 +2,77 @@
 // 处理单式文本域输入值
 function getTextareaData(m){
     const me = m.$data;
+    me.userArr = [];
     let successData = [];
-    let arr = me.textareaData.split(' ');
+    const reg = /^[0-9]+.?[0-9]*$/;
+    const arr = me.textareaData.split(' ');
     for (let i = 0; i < arr.length; i++) {
         successData.push(arr[i].split(''));
     }
-    console.log(arr);
-    console.log(successData);
-    for (let j = 0; j < successData.length; j++) {
-        switch (successData[j].length) {
-            case 5:
-                me.userArr.push(successData[j].map(Number));                
-            break;
-            case 4:
-                me.userArr.push(successData[j].map(Number));
-            break;
-            default:
-                layer.msg('选择的号码不合法');
-                successData = [];
-                me.userArr = [[],[],[],[],[]];
-                // me.textareaData = '';
+    for (let i = 0; i < successData.length; i++) {
+        me.userArr.push(successData[i].map(Number));
+        for (let j = 0; j < me.userArr[i].length; j++) {
+            if(!reg.test(me.userArr[i][j])){
+                layer.msg('请输入阿拉伯数字或正整数',{time:1600});
+                return
+            }
+        }
+    }
+    me.userArr = spliceBetNumberArr(me.userArr,me.userArr.length);
+    switch (me.NavTwo_index) {
+        case 2:
+            me.userArrLen = 5;
+        break;
+        case 14:case 20:case 71:
+            me.userArrLen = 4;
+        break;
+        case 26:case 30:case 32:case 36:case 38:case 42:case 66:case 69:
+            me.userArrLen = 3;
+        break;
+        case 44:case 48:case 50:case 54:case 63:
+            me.userArrLen = 2;
+        break;
+    }
+    for (let i = 0; i < me.userArr.length; i++) {
+        if(me.userArr[i].length!==me.userArrLen){
+            layer.msg('选择的号码不合法',{time:950});
             return
         }
     }
-    me.userArr = spliceBetNumberArr(me.userArr,5);
-    // 调用相关玩法的算法计算注数
     switch (me.NavTwo_index) {
-        case 2:case 14:case 20:
+        case 63: //任选2单式
+            if(me.rxArr.length==3){
+                me.bettingInfo.bettingNumber = (me.userArr.length*3);
+            }else if(me.rxArr.length==4){
+                me.bettingInfo.bettingNumber = (me.userArr.length*6);
+            }else if(me.rxArr.length==5){
+                me.bettingInfo.bettingNumber = (me.userArr.length*10);
+            }else{
+                me.bettingInfo.bettingNumber = me.userArr.length;
+            }
+        break;
+        case 66:case 69: //任选3单式、混合组选
+            if(me.rxArr.length==4){
+                me.bettingInfo.bettingNumber = (me.userArr.length*4);
+            }else if(me.rxArr.length==5){
+                me.bettingInfo.bettingNumber = (me.userArr.length*10);
+            }else{
+                me.bettingInfo.bettingNumber = me.userArr.length;
+            }
+        break;
+        case 71: //任选4单式
+            if(me.rxArr.length==5){
+                me.bettingInfo.bettingNumber = (me.userArr.length*5);
+            }else{
+                me.bettingInfo.bettingNumber = me.userArr.length;
+            }
+        break;
+        default:
             me.bettingInfo.bettingNumber = me.userArr.length;
         break;
     }
     me.bettingInfo.allMoney = (me.bettingInfo.singleMoney*me.bettingInfo.bettingNumber)*me.bettingInfo.setMultipleNumber;
-    // AssemblyData(m,2)
-    console.log(me.userArr);
+    AssemblyData(m,2);
 };
 export{
     getTextareaData
@@ -102,7 +140,7 @@ function singleSelect(e,y,x,me){
     }
     // 总金额=单注金额x注数x投注倍数
     me.bettingInfo.allMoney = (me.bettingInfo.singleMoney*me.bettingInfo.bettingNumber)*me.bettingInfo.setMultipleNumber;
-    console.log(me.userArr)
+    // console.log(me.userArr)
 };
 export{
     singleSelect
@@ -137,7 +175,7 @@ function singleSelectChinese(e,y,x,me){
         break;
     }
     me.bettingInfo.allMoney = (me.bettingInfo.singleMoney*me.bettingInfo.bettingNumber)*me.bettingInfo.setMultipleNumber;
-    console.log(me.userArrChinese);
+    // console.log(me.userArrChinese);
 };
 export{
     singleSelectChinese
@@ -212,12 +250,12 @@ function multipleSelect(e,y,x,me){
     }
     // 总金额=单注金额x注数x投注倍数
     me.bettingInfo.allMoney = (me.bettingInfo.singleMoney*me.bettingInfo.bettingNumber)*me.bettingInfo.setMultipleNumber;
-    console.log(me.userArr)
+    // console.log(me.userArr)
 };
 export{
     multipleSelect
 }
-// 任选
+// 任选万千百十个选择
 function selectClass(e,index,me){
     if(me.rxArr.indexOf(index) === -1){
         me.rxArr.push(index);
@@ -225,20 +263,32 @@ function selectClass(e,index,me){
         me.rxArr.splice($.inArray(index,me.rxArr),1);
     }
     switch (me.NavTwo_index) {
-        case 63:case 64: //任选2
+        case 64: //任选2
             me.bettingInfo.bettingNumber = renxuan2zx(me);
         break;
         case 67:case 68: //任选3组三组六
             me.bettingInfo.bettingNumber = rxz3z6(me);
         break;
-        case 66:case 69: //任选3
-
+        case 63: //任选2单式
+            if(me.rxArr.length<2){
+                me.rxArr.push(index);
+                layer.msg('至少选择两个',{time:800});
+            }
         break;
-        case 71: //任选4
-
+        case 66:case 69: //任选3单式、混合组选
+            if(me.rxArr.length<3){
+                me.rxArr.push(index);
+                layer.msg('至少选择三个',{time:800});
+            }
+        break;
+        case 71: //任选4单式
+            if(me.rxArr.length<4){
+                me.rxArr.push(index);
+                layer.msg('至少选择四个',{time:800});
+            }
         break;
     };
-    console.log(me.rxArr);
+    // console.log(me.rxArr);
 };
 export{
     selectClass
@@ -257,6 +307,14 @@ function AssemblyData(m,num){
             xuanzheData[i] = me.userArr[i];
         }
     }
+    switch (me.NavTwo_index) {
+        case 1:case 55:case 62:case 65:case 70:
+            
+        break;
+        default:
+            spliceBetNumberArr(xuanzheData,5);
+        break;
+    }
     successData = (xuanzheData.join('|')).replace(/,/g,' ');
     switch (me.NavTwo_index) {
         case 63:case 64:case 66:case 67:case 68:case 69:case 71: //有选择'万千百十个'的情况
@@ -272,13 +330,13 @@ function AssemblyData(m,num){
             }
         break
         case 46:case 52: //两排汉字
-            successData = me.userArrChinese;            
+            let arr = me.userArrChinese[0]+'|'+me.userArrChinese[1];
+            successData = arr.replace(/,/g,' ');
         break;
         case 6:case 81:case 82:case 83:case 84:case 85:case 86:case 87:case 88:case 89:case 90: //单排汉字
-            successData = me.userArrChinese;
+            spliceBetNumberArr(me.userArrChinese,2);
+            successData = (me.userArrChinese[0].join(' ')).replace(/,/g,' ');
         break
-        // default:
-        // break;
     }
     list = {
         number:successData,
@@ -291,6 +349,7 @@ function AssemblyData(m,num){
         multiple:me.bettingInfo.setMultipleNumber,
         name:me.NavOneData.name+'-'+me.NavTwoData.rule,
     };
+    // console.log(me.NavTwoData)
     if(num==1){
         me.myObj.push(list);
     }else{

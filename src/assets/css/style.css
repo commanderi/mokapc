@@ -1082,6 +1082,7 @@ footer{
 }
 .LotteryInformation_con_list_bottom{
     background-color: #fff;
+    min-height: 280px;
 }
 .lf_Lottery_tab{
     margin: 0px 0px;
@@ -1602,6 +1603,7 @@ footer{
     position: absolute;
     margin-bottom: 50px;
     max-width: 1200px;
+    min-width: 1200px;
 }
 .betcenterContent_header{
     display: -ms-flexbox;
@@ -2104,6 +2106,7 @@ footer{
 .cao_claler{
     background-color: #e4393c;
     color: #fff;
+    margin-right: 20px;
 }
 .cao_disabled{
     cursor: not-allowed;

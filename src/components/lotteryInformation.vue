@@ -13,9 +13,9 @@
                         <!-- <b class="lf_LotteryInformation_tab_return" ><i class="iconfont icon-jiantou"></i>返回目录</b> -->
                         <li v-on:click="getHotCate()" class="layui-this">全部</li>
                         <li v-on:click="getHotCate('PK10')">PK10</li>
-                        <li v-on:click="getHotCate('KS')">快三</li>
+                        <!-- <li v-on:click="getHotCate('KS')">快三</li> -->
                         <li v-on:click="getHotCate('SSC')">时时彩</li>
-                        <li v-on:click="getHotCate('LHC')">六合彩</li>
+                        <!-- <li v-on:click="getHotCate('LHC')">六合彩</li> -->
                     </ul>
                     <div class="layui-tab-content lf_LotteryInformation_con_list">
                         <div class="layui-tab-item lf_layui-tab-item layui-show">
@@ -139,12 +139,8 @@ export default {
             .then(res => {
                 if(res.data.ret==200){
                     this.muaData = res.data.data;
-                    if(id=='KS'){
-                        this.getnewopennumberdetail(9)
-                    }else if(id=='SSC'){
+                    if(id=='SSC'){
                         this.getnewopennumberdetail(5)
-                    }else if(id=='LHC'){
-                        this.getnewopennumberdetail(11)
                     }else if(id=='PK10'){
                         this.getnewopennumberdetail(3)
                     }

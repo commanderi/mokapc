@@ -174,53 +174,14 @@ export default {
         this.getRechargeWays();
     }
 }
-    // var laydate = layui.laydate;
-    // laydate.render({
-    //     elem: '#test1'
+    // $('.Details_xiala').on('click',function(){
+    //     $(this).siblings('.user_988_list_body_tow_box').show();
     // });
-
-    // laydate.render({
-    //     elem: '#test7',
-    //     range: true
-    // });
-    // laydate.render({
-    //     elem: '#test8',
-    //     range: true
-    // });
-    // laydate.render({
-    //     elem: '#test9',
-    //     range: true
-    // });
-    // var slider = layui.slider;
-    // slider.render({
-    //     elem: '#setUserRebate_number',
-    //     theme: '#f10320',
-    //     min: 0,
-    //     max: 100,
-    //     tips: false,
-    //     change: function(value){
-    //         $('#thisfan').text(value/10);
-    //     }
-    // });
-    // slider.render({
-    //     elem: '#setinviteNewUser_number',
-    //     theme: '#f10320',
-    //     min: 0,
-    //     max: 100,
-    //     tips: false,
-    //     change: function(value){
-    //         console.log(value);
-    //     }
-    // });
-    
-    $('.Details_xiala').on('click',function(){
-        $(this).siblings('.user_988_list_body_tow_box').show();
-    });
-    $('.addBankCardReturn').on('click',function(){
-        $('.addBankCardMeun').animate({'left':'-100%'},function(){
-            $(this).hide();
-        })
-    })
+    // $('.addBankCardReturn').on('click',function(){
+    //     $('.addBankCardMeun').animate({'left':'-100%'},function(){
+    //         $(this).hide();
+    //     })
+    // })
     
 </script>
 <style scoped>

@@ -63,10 +63,12 @@
             </router-link>
         </div>
         <div class="menuItem">
-            <button class="subMenuItem subMenuItemOther clear">
-                <img class="menuBtnIcon" src="../../assets/img/15702.png">
-                <span class="cai_font">优惠活动</span>
-            </button>
+            <router-link to="/promotions">
+                <button class="subMenuItem subMenuItemOther clear">
+                    <img class="menuBtnIcon" src="../../assets/img/15702.png">
+                    <span class="cai_font">优惠活动</span>
+                </button>
+            </router-link>
         </div>
         <div class="menuItem">
             <router-link to="/lotteryInformation">
@@ -177,10 +179,14 @@ export default {
             this.userId = localStorage.getItem('userId');
             this.userToken = localStorage.getItem('userToken');
             if(this.userId==null || this.userId==undefined){
-                layer.msg('没有获取到您的用户id,请重新登录重试');
+                layer.msg('没有获取到您的用户id,请重新登录重试',function(){
+                    window.location.href = 'http://www.vs04o.cn';
+                });
                 return
             }else if(this.userToken==null || this.userToken==undefined){
-                layer.msg('没有获取到您的用户token,请重新登录重试');
+                layer.msg('没有获取到您的用户token,请重新登录重试',function(){
+                    window.location.href = 'http://www.vs04o.cn';
+                });
                 return
             }else{
 

@@ -96,19 +96,24 @@ export default {
             }else{
                 switch (name) {
                     case 'sb':
-                        window.location.href = this.listData.url_ibc;
+                        layer.msg('敬请期待');
+                        // window.location.href = this.listData.url_ibc;
                     break;
                     case 'ag':
-                        window.location.href = this.listData.url_ag;
+                        layer.msg('敬请期待');
+                        // window.location.href = this.listData.url_ag;
                     break;
                     case 'ky':
-                        window.location.href = this.listData.url_ky;
+                        layer.msg('敬请期待');
+                        // window.location.href = this.listData.url_ky;
                     break;
                     case 'jdb':
-                        window.location.href = this.listData.url_jdb;
+                        layer.msg('敬请期待');
+                        // window.location.href = this.listData.url_jdb;
                     break;
                     case 'cq':
-                        window.location.href = this.listData.url_cq;
+                        layer.msg('敬请期待');
+                        // window.location.href = this.listData.url_cq;
                     break;
                 }
             }
@@ -141,10 +146,14 @@ export default {
             this.userId = localStorage.getItem('userId');
             this.userToken = localStorage.getItem('userToken');
             if(this.userId==null || this.userId==undefined){
-                layer.msg('没有获取到您的用户id,请重新登录重试');
+                layer.msg('没有获取到您的用户id,请重新登录重试',function(){
+                    window.location.href = 'http://www.vs04o.cn';
+                });
                 return
             }else if(this.userToken==null || this.userToken==undefined){
-                layer.msg('没有获取到您的用户token,请重新登录重试');
+                layer.msg('没有获取到您的用户token,请重新登录重试',function(){
+                    window.location.href = 'http://www.vs04o.cn';
+                });
                 return
             }else{
                 this.getThirdUrl();

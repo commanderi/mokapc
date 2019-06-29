@@ -24,14 +24,16 @@
                 </span>
             </div>
             <div class="PublicityNumberBox">
-                <template v-if="data.lastOneNumber!=null">
-                    <p class="betcenterContent_header_time_p" v-if="data.thisOpenTottery.next_stage==undefined">第<strong>{{ Number(data.thisOpenTottery.next_stage)-1 }}</strong>期开奖号码</p>
+                <template v-if="data.lastOneNumber!=undefined || data.lastOneNumber!=null">
+                    <p class="betcenterContent_header_time_p" v-if="data.lastOneNumber[0]!=null">第<strong>{{ data.lastOneNumber[0].stage }}</strong>期开奖号码</p>
                     <p class="betcenterContent_header_time_p" v-else>正在等待第<strong>{{ Number(data.thisOpenTottery.next_stage)-1 }}</strong>期开奖......</p>
                 </template>
                 <div>
-                    <template>
-                        <span class="lottery__highlight_y" v-for="(d,i) in data.lastOneNumber" :key="i">{{ d }}</span>
-                        <!-- <b class="gameHistory_number_k3_font_top">{{ d }}</b> -->
+                    <template v-if="data.lastOneNumber!=undefined || data.lastOneNumber!=null">
+                        <template v-if="data.lastOneNumber[0]!=undefined">
+                            <span class="lottery__highlight_y" v-for="(item,index) in data.lastOneNumber[0].number" :key="index">{{ data.lastOneNumber[0].number[index] }}</span>
+                            <b class="gameHistory_number_k3_font_top">{{ data.lastOneNumber[0].detail[0] }} | {{ data.lastOneNumber[0].detail[1] }}</b>
+                        </template>
                     </template>
                 </div>
             </div>
@@ -60,7 +62,7 @@
             <!-- 主体左边 -->
             <div class="betcenterContent_Nav_Subnavs_body_left">
                 <!-- 五星 -->
-                <div class="selectLotteryTicketNum" v-show="NavOne_index==0">
+                <div class="selectLotteryTicketNum" v-if="NavOne_index==0">
                     <template v-if="NavTwo_index==1">
                         <div class="selectLotteryTicketNum_box" v-for="(k,index) in 5" :key="index">
                             <div class="weishu">{{ titleArr[index] }}</div>
@@ -128,7 +130,7 @@
                     </template>
                 </div>
                 <!-- 四星 -->
-                <div class="selectLotteryTicketNum" v-show="NavOne_index==1">
+                <div class="selectLotteryTicketNum" v-else-if="NavOne_index==1">
                     <template v-if="NavTwo_index==13||NavTwo_index==19">
                         <div class="selectLotteryTicketNum_box" v-for="(k,index) in 4" :key="index">
                             <div class="weishu">{{ titleArr[index+1] }}</div>
@@ -178,7 +180,7 @@
                     </template>
                 </div>
                 <!-- 三星 -->
-                <div class="selectLotteryTicketNum" v-show="NavOne_index==2||NavOne_index==3||NavOne_index==4">
+                <div class="selectLotteryTicketNum" v-else-if="NavOne_index==2||NavOne_index==3||NavOne_index==4">
                     <template v-if="NavTwo_index==25||NavTwo_index==31||NavTwo_index==37">
                         <div class="selectLotteryTicketNum_box" v-for="(k,index) in 3" :key="index">
                             <div class="weishu" v-if="NavTwo_index==25">{{ titleArr[index+2] }}</div>
@@ -232,7 +234,7 @@
                     </template>
                 </div>
                 <!-- 二星 -->
-                <div class="selectLotteryTicketNum" v-show="NavOne_index==5||NavOne_index==6">
+                <div class="selectLotteryTicketNum" v-else-if="NavOne_index==5||NavOne_index==6">
                     <template v-if="NavTwo_index==43||NavTwo_index==49">
                         <div class="selectLotteryTicketNum_box" v-for="(k,index) in 2" :key="index">
                             <div class="weishu">{{ NavTwo_index==43 ? titleArr[index+3] : titleArr[index] }}</div>
@@ -293,7 +295,7 @@
                     </template>
                 </div>
                 <!-- 定位胆 -->
-                <div class="selectLotteryTicketNum" v-show="NavOne_index==7">
+                <div class="selectLotteryTicketNum" v-else-if="NavOne_index==7">
                     <div class="selectLotteryTicketNum_box" v-for="(k,index) in 5" :key="index">
                         <div class="weishu">{{ titleArr[index] }}</div>
                         <div class="selectLotteryTicketNum_box_number">
@@ -307,7 +309,7 @@
                     </div>
                 </div>
                 <!-- 不定胆 -->
-                <div class="selectLotteryTicketNum" v-show="NavOne_index==8">
+                <div class="selectLotteryTicketNum" v-else-if="NavOne_index==8">
                     <div class="selectLotteryTicketNum_box" v-for="(k,index) in 1" :key="index">
                         <div class="weishu">不定胆</div>
                         <div class="selectLotteryTicketNum_box_number">
@@ -321,7 +323,7 @@
                     </div>
                 </div>
                 <!-- 任选234 -->
-                <div class="selectLotteryTicketNum" v-show="NavOne_index==9||NavOne_index==10||NavOne_index==11">
+                <div class="selectLotteryTicketNum" v-else-if="NavOne_index==9||NavOne_index==10||NavOne_index==11">
                     <!-- 任选234复式 -->
                     <template v-if="NavTwo_index==62||NavTwo_index==65||NavTwo_index==70">
                         <div class="selectLotteryTicketNum_box" v-for="(k,index) in 5" :key="index">
@@ -344,8 +346,8 @@
                             </button>
                         </div>
                         <div class="selectLotteryTicketNum_box" v-for="(k,index) in 1" :key="index">
-                            <div class="danshi">
-                                <textarea class="dantext" v-on:input="ontextareaData($event)" v-model="textareaData" cols="" rows=""></textarea>
+                            <div class="danshi danshirx">
+                                <textarea class="dantext rxteshu" v-on:input="ontextareaData($event)" v-model="textareaData" cols="" rows=""></textarea>
                             </div>
                         </div>
                     </template>
@@ -369,7 +371,7 @@
                     </template>
                 </div>
                 <!-- 趣味 -->
-                <div class="selectLotteryTicketNum" v-show="NavOne_index==12">
+                <div class="selectLotteryTicketNum" v-else-if="NavOne_index==12">
                     <div class="selectLotteryTicketNum_box" v-for="(k,index) in 1" :key="index">
                         <div class="weishu">选号</div>
                         <div class="selectLotteryTicketNum_box_number">
@@ -383,7 +385,7 @@
                     </div>
                 </div>
                 <!-- 龙虎 -->
-                <div class="selectLotteryTicketNum" v-show="NavOne_index==13">
+                <div class="selectLotteryTicketNum" v-else-if="NavOne_index==13">
                     <div class="selectLotteryTicketNum_box" v-for="(k,index) in 1" :key="index">
                         <div class="weishu">龙虎</div>
                         <div class="selectLotteryTicketNum_box_number">
@@ -503,6 +505,7 @@ export default {
             userArr:[[],[],[],[],[]],
             userArrChinese:[[],[]],
             rxArr:[], //任选
+            userArrLen:0,
             // 获取的数据
             data:{
                 lastOpenNumber:null, //近十期开奖号码数据
@@ -569,15 +572,20 @@ export default {
         },
         // 该事件将被兄弟组件触发
         bortherMethods:function(a){
-            // console.log(specificTypeData);
+            this.clearUserArr();
+            this.clearmyJson();
+            this.NavOne_index = 0;
+            this.NavTwo_index = 1;
+            clearInterval(this.lastTimeFn);
+            clearInterval(this.timeFn);
         },    
         // 监听单注金额input
         ononeMoney(e){
-            console.log(e.data);
+            // console.log(e.data);
         },
         // 监听倍数input
         onsetMultipleNumber(e){
-            console.log(e.data)
+            // console.log(e.data)
         },
         // 添加号码
         addNumberBtn:function(){
@@ -588,7 +596,7 @@ export default {
             }
         },
         ontextareaData:function(e){
-            console.log(e.data);
+            // console.log(e.data);
         },
         // 立即投注
         bettingBtn_direct:function(){
@@ -633,8 +641,9 @@ export default {
             this.NavTwo_index = data.play_rule[0].odds[0].id;
             this.bettingInfo.rate = data.play_rule[0].odds[0].rate;
             this.NavOneData = data;
+            this.NavTwoData = data.play_rule[0].odds[0];
             this.clearUserArr();
-            console.log('NavOneData',data);
+            // console.log('NavOneData',data);
         },
         // 点击二级菜单选择的数据
         selectTwoNav:function(i,data){
@@ -642,7 +651,7 @@ export default {
             this.bettingInfo.rate = data.rate;
             this.NavTwoData = data;
             this.clearUserArr();
-            console.log('NavTwoData',data);
+            // console.log('NavTwoData',data);
         },
         // 设置单笔投注金额
         setMoneyNumber:function(index){
@@ -878,7 +887,9 @@ export default {
 <style scoped>
 .betcenterContent_Nav_Subnavs_two{width: auto;margin: 12px 15px 12px 8px;}
 .betcenterContent_Nav_Subnavs_two>button{background-color: #fff;color: #2f2f2f;cursor: pointer;border-radius: 4px;border: 1px solid #dddddd;padding: 4px 12px;margin-right:5px;}
-.dantext{width: 98%;height: auto;min-height: 230px;max-height: 500px;resize:none;padding: 10px 1%;}
+.dantext{width: 98%;height: auto;min-height: 230px;max-height: 500px;resize:none;padding: 10px 1%;font-size: 20px;}
+.rxteshu{min-height: 178px;}
+.danshirx{min-height: 203px;}
 </style>
 
 

@@ -68,6 +68,10 @@ export default {
         },
         // 子组件betcenterMenu传递过来的事件
         fatherReceive(a,b) {
+            // if(b==3||b==4){
+            //     layer.msg('开发中......');
+            //     return
+            // }
             this.showMe = b;
             // 父组件通过$ref调用子组件各个彩种中的事件方法
             try {
