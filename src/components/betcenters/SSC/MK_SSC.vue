@@ -568,7 +568,13 @@ export default {
             let jw = document.body.offsetWidth;
             let jm = document.getElementsByClassName('betcenterMenu')[0].offsetWidth;
             let jc = document.getElementsByClassName('betcenterContent')[0];
-            jc.style.left = ((jw-jc.offsetWidth)/2)+(jm/2)+'px';
+            if(jw>1920){
+                jc.style.left = document.getElementsByClassName('betcenter')[0].offsetWidth-jc.offsetWidth+'px';
+                $('.betcenter,.header_top_logIn').css('max-width','1500px');
+                $('.header_top_logIn_con').css('margin-right','0%');
+            }else{
+                jc.style.left = ((jw-jc.offsetWidth)/2)+(jm/2)+'px';
+            }
         },
         // 该事件将被兄弟组件触发
         bortherMethods:function(a){
