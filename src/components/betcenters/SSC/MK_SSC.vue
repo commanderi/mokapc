@@ -32,7 +32,7 @@
                     <template v-if="data.lastOneNumber!=undefined || data.lastOneNumber!=null">
                         <template v-if="data.lastOneNumber[0]!=undefined">
                             <span class="lottery__highlight_y" v-for="(item,index) in data.lastOneNumber[0].number" :key="index">{{ data.lastOneNumber[0].number[index] }}</span>
-                            <b class="gameHistory_number_k3_font_top">{{ data.lastOneNumber[0].detail[0] }} | {{ data.lastOneNumber[0].detail[1] }}</b>
+                            <b class="gameHistory_number_k3_font_top">{{ data.lastOneNumber[0].detail[0] }}</b>
                         </template>
                     </template>
                 </div>
@@ -442,7 +442,7 @@
                                 <div>{{ item.stage }}</div>
                                 <div class="gameHistory_number">
                                     <span v-for="(k,j) in item.number" :key="j">{{ k }}</span>
-                                    <b class="gameHistory_number_k3_font">{{ item.detail[0] }} | {{ item.detail[1] }}</b>
+                                    <b class="gameHistory_number_k3_font">{{ item.detail[0] }}</b>
                                 </div>
                             </li>
                         </ul>
@@ -843,11 +843,15 @@ export default {
                     .then(res => {
                         if(res.data.ret==200){
                             this.data.lastOneNumber = res.data.data;
+                            this.getRecentTotteryData();
                         }else{
                             // console.log('未获取到上一期开奖号码');
                             switch (Number(this.$store.state.specificTypeID[0])) {
                                 case 5: //重庆时时彩
                                     this.forTime = 20000;
+                                break;
+                                default:
+                                    this.forTime = 10000;
                                 break;
                             }
                             clearInterval(this.lastTimeFn);

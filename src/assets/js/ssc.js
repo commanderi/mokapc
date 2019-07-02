@@ -140,7 +140,7 @@ function singleSelect(e,y,x,me){
     }
     // 总金额=单注金额x注数x投注倍数
     me.bettingInfo.allMoney = (me.bettingInfo.singleMoney*me.bettingInfo.bettingNumber)*me.bettingInfo.setMultipleNumber;
-    // console.log(me.userArr)
+    console.log(me.userArr)
 };
 export{
     singleSelect
@@ -288,6 +288,7 @@ function selectClass(e,index,me){
             }
         break;
     };
+    me.rxArr.sort();
     // console.log(me.rxArr);
 };
 export{
@@ -323,7 +324,7 @@ function AssemblyData(m,num){
             }
             successData = rr+':'+successData;
         break;
-        case 3:case 4:case 5:case 7:case 15:case 16:case 17:case 21:case 23:case 28:case 29:case 34:case 35:case 40:
+        case 3:case 4:case 5:case 7:case 15:case 17:case 21:case 23:case 28:case 29:case 34:case 35:case 40:
         case 41:case 47:case 53:case 56:case 57:case 58:case 59:case 60:case 61:case 77:case 78:case 79:case 80: //单排数字
             for (let j = 0; j < successData.length; j++) {
                 successData = successData.replace('|','');
