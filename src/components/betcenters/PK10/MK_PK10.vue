@@ -448,11 +448,11 @@ export default {
         // 立即投注
         bettingBtn_direct:function(){
             AssemblyData(this,1);
-            // this.nowBetting();
+            this.nowBetting();
         },
         // 确认投注
         bettingBtn_confirm:function(){
-            // this.yesBetting();
+            this.yesBetting();
         },
         // 单选
         singleSelectFn(e,y,x){
@@ -549,6 +549,64 @@ export default {
         },
         clearmyJson:function(){
             this.myJson = [];
+        },
+        // 确认投注
+        yesBetting:function(){
+            if(localStorage.getItem('loginStatus')=='true'){
+                // 选择了多个之后，并已经添加到底部，开始投注
+                let userToken = localStorage.getItem('userToken');
+                let uid = localStorage.getItem('userId');
+                this.$http({
+                    method: 'post',
+                    url: this.$store.state.postUrl+'lottery/betting',
+                    data:{'cate':this.$store.state.specificTypeID[0],'list':JSON.stringify(this.myJson),'uid':uid,'token':userToken}
+                })
+                .then(res => {
+                    if(res.data.ret==200){
+                        layer.msg(res.data.msg);
+                        // this.clearUserArr();
+                        this.clearmyJson();
+                    }else{
+                        layer.msg(res.data.msg);
+                    }
+                })
+                .catch(err => {
+                    layer.msg('投注出错,请重试:'+err);
+                })
+            }else{
+                layer.msg('未登录，无法投注');
+            }
+        },
+        // 立即投注
+        nowBetting:function(){
+            if(localStorage.getItem('loginStatus')=='true'){
+                let userToken = localStorage.getItem('userToken');
+                let uid = localStorage.getItem('userId');
+                if(this.myObj==null||this.myObj==''){
+                    layer.msg('选择的数据不能为空');
+                    return
+                }else{
+                    this.$http({
+                        method: 'post',
+                        url: this.$store.state.postUrl+'lottery/betting',
+                        data:{'cate':this.$store.state.specificTypeID[0],'list':JSON.stringify(this.myObj),'uid':uid,'token':userToken}
+                    })
+                    .then(res => {
+                        if(res.data.ret==200){
+                            layer.msg(res.data.msg);
+                            this.clearUserArr();
+                            this.myObj = [];
+                        }else{
+                            layer.msg(res.data.msg);
+                        }
+                    })
+                    .catch(err => {
+                        layer.msg('投注出错,请重试:'+err);
+                    })
+                }
+            }else{
+                layer.msg('未登录，无法投注');
+            }
         },
         // 获取最近10期的开奖结果
         getRecentTotteryData:function(){

@@ -90,44 +90,71 @@ export{
 // 处理单式文本域输入值
 function getTextareaData(m){
     const me = m.$data;
-    me.userArr = [];
-    let successData = [];
-    const reg = /^[0-9]+.?[0-9]*$/;
-    const arr = me.textareaData.split(' ');
-    for (let i = 0; i < arr.length; i++) {
-        successData.push(arr[i].split(''));
-    }
-    console.log(arr);
-    for (let i = 0; i < successData.length; i++) {
-        me.userArr.push(successData[i].map(Number));
-        for (let j = 0; j < me.userArr[i].length; j++) {
-            if(!reg.test(me.userArr[i][j])){
-                layer.msg('请输入阿拉伯数字或正整数',{time:1600});
-                return
-            }
-        }
-    }
-    me.userArr = spliceBetNumberArr(me.userArr,me.userArr.length);
     switch (me.NavTwo_index) {
-        case 103:
-            me.userArrLen = 5;
-        break;
-        case 101:
-            me.userArrLen = 4;
+        case 95:
+            me.userArr = [[],[]];            
         break;
         case 98:
-            me.userArrLen = 3;
+            me.userArr = [[],[],[],[]];            
         break;
-        case 95:
-            me.userArrLen = 2;
+        case 101:
+            me.userArr = [[],[],[],[]];            
+        break;
+        case 103:
+            me.userArr = [[],[],[],[],[]];            
+        break;
+        default:
+            me.userArr = [];
         break;
     }
-    for (let i = 0; i < me.userArr.length; i++) {
-        if(me.userArr[i].length!==me.userArrLen){
-            layer.msg('选择的号码不合法',{time:950});
-            return
+    let arr = me.textareaData.split(' ');
+    try {
+        for (let i = 0; i < arr.length; i++) {
+            for (let j = 0; j < arr[i].length/2; j++) {
+                me.userArr[i][j] = arr[i].slice(j*2,(j*2)+2);
+                if(!Number(me.userArr[i][j])){
+                    layer.msg('请输入阿拉伯数字或正整数',{time:1600});
+                    return
+                }
+            }
+        }
+    } catch (error) {
+        layer.msg('选择的号码不合法+',{time:950});
+        return
+    }
+    me.userArr = spliceBetNumberArr(me.userArr,me.userArr.length);
+    console.log(me.userArr)
+    for (let j = 0; j < me.userArr.length; j++) {
+        switch (me.NavTwo_index) {
+            case 95:
+                if(me.userArr[j].length!=2){
+                    layer.msg('选择的号码不合法',{time:950});
+                    return
+                }
+            break;
+            case 98:
+                if(me.userArr[j].length!=3){
+                    layer.msg('选择的号码不合法',{time:950});
+                    return
+                }
+            break;
+            case 101:
+                if(me.userArr[j].length!=4){
+                    layer.msg('选择的号码不合法',{time:950});
+                    return
+                }
+            break;
+            case 103:
+                if(me.userArr[j].length!=5){
+                    layer.msg('选择的号码不合法',{time:950});
+                    return
+                }
+            break;
+            default:
+            break;
         }
     }
+    me.bettingInfo.bettingNumber = qian2_3_4_5(me.NavTwo_index,me.userArr);
     me.bettingInfo.allMoney = (me.bettingInfo.singleMoney*me.bettingInfo.bettingNumber)*me.bettingInfo.setMultipleNumber;
     AssemblyData(m,2);
 };
@@ -180,7 +207,7 @@ export{
 function qian2_3_4_5(id,datasel){
     var nums = 0, tmp_nums = 1;
     switch (id) {
-        case 102:
+        case 102:case 103:
             if (datasel[0].length > 0 && datasel[1].length > 0 && datasel[2].length > 0 && datasel[3].length > 0 && datasel[4].length > 0) {
                 for (var i = 0; i < datasel[0].length; i++) {
                     for (var j = 0; j < datasel[1].length; j++) {
@@ -197,7 +224,7 @@ function qian2_3_4_5(id,datasel){
                 }
             }
         break;
-        case 100:
+        case 100:case 101:
             if (datasel[0].length > 0 && datasel[1].length > 0 && datasel[2].length > 0 && datasel[3].length > 0) {
                 for (var i = 0; i < datasel[0].length; i++) {
                     for (var j = 0; j < datasel[1].length; j++) {
@@ -212,7 +239,7 @@ function qian2_3_4_5(id,datasel){
                 }
             }
         break;
-        case 97:
+        case 97:case 98:
             if (datasel[0].length > 0 && datasel[1].length > 0 && datasel[2].length > 0) {
                 for (var i = 0; i < datasel[0].length; i++) {
                     for (var j = 0; j < datasel[1].length; j++) {
@@ -225,7 +252,7 @@ function qian2_3_4_5(id,datasel){
                 }
             }
         break;
-        case 94:
+        case 94:case 95:
             if (datasel[0].length > 0 && datasel[1].length > 0) {
                 for (var i = 0; i < datasel[0].length; i++) {
                     for (var j = 0; j < datasel[1].length; j++) {
