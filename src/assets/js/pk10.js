@@ -119,40 +119,38 @@ function getTextareaData(m){
             }
         }
     } catch (error) {
-        layer.msg('选择的号码不合法+',{time:950});
+        layer.msg('选择的号码不合法',{time:950});
         return
     }
     me.userArr = spliceBetNumberArr(me.userArr,me.userArr.length);
-    console.log(me.userArr)
-    for (let j = 0; j < me.userArr.length; j++) {
-        switch (me.NavTwo_index) {
-            case 95:
-                if(me.userArr[j].length!=2){
-                    layer.msg('选择的号码不合法',{time:950});
-                    return
-                }
-            break;
-            case 98:
-                if(me.userArr[j].length!=3){
-                    layer.msg('选择的号码不合法',{time:950});
-                    return
-                }
-            break;
-            case 101:
-                if(me.userArr[j].length!=4){
-                    layer.msg('选择的号码不合法',{time:950});
-                    return
-                }
-            break;
-            case 103:
-                if(me.userArr[j].length!=5){
-                    layer.msg('选择的号码不合法',{time:950});
-                    return
-                }
-            break;
-            default:
-            break;
-        }
+    // console.log(me.userArr)
+    switch (me.NavTwo_index) {
+        case 95:
+            if(me.userArr.length!=2){
+                layer.msg('选择的号码不合法',{time:950});
+                return
+            }
+        break;
+        case 98:
+            if(me.userArr.length!=3){
+                layer.msg('选择的号码不合法',{time:950});
+                return
+            }
+        break;
+        case 101:
+            if(me.userArr.length!=4){
+                layer.msg('选择的号码不合法',{time:950});
+                return
+            }
+        break;
+        case 103:
+            if(me.userArr.length!=5){
+                layer.msg('选择的号码不合法',{time:950});
+                return
+            }
+        break;
+        default:
+        break;
     }
     me.bettingInfo.bettingNumber = qian2_3_4_5(me.NavTwo_index,me.userArr);
     me.bettingInfo.allMoney = (me.bettingInfo.singleMoney*me.bettingInfo.bettingNumber)*me.bettingInfo.setMultipleNumber;

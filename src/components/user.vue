@@ -31,13 +31,34 @@
                 <!-- 添加银行卡菜单 -->
                 <div class="addBankCardMeun" v-show="showaddBankCardReturn==4">
                     <h6 class="userBoxMeun_title addBankCardReturn" v-on:click="addBankCardReturn"><i class="iconfont icon-jiantou"></i>返回</h6>
-                    <ul>
-                        <li>
-                            <dl class="userBoxMeun_list_dl">
-                                <dd v-for="(d,i) in RechargeList" :key="i" v-on:click="rechargeSerial(d)"><a href="javascript:void(0)">{{ d.title }}</a></dd>
-                            </dl>
-                        </li>
-                    </ul>
+                    <div class="chongzhi">
+                        <ul>
+                            <li v-on:click="qiehuan(1)" :class="czid==1 ? 'chongzhi_add' : ''">
+                                <p class="chongzhit"><i class="iconfont icon-iconzhi02"></i>微&ensp;&ensp;信<i class="iconfont icon-xiala"></i></p>
+                                <dl class="czdl">
+                                    <template v-for="(d,j) in RechargeList">
+                                        <dd :key="j" v-if="d.type==1" v-on:click="rechargeSerial(d)">{{ d.title }}</dd>
+                                    </template>
+                                </dl>
+                            </li>
+                            <li v-on:click="qiehuan(2)" :class="czid==2 ? 'chongzhi_add' : ''">
+                                <p class="chongzhit"><i class="iconfont icon-iconzhi01"></i>支付宝<i class="iconfont icon-xiala"></i></p>
+                                <dl class="czdl">
+                                    <template v-for="(d,j) in RechargeList">
+                                        <dd :key="j" v-if="d.type==2" v-on:click="rechargeSerial(d)">{{ d.title }}</dd>
+                                    </template>
+                                </dl>
+                            </li>
+                            <li  v-on:click="qiehuan(3)" :class="czid==3 ? 'chongzhi_add' : ''">
+                                <p class="chongzhit"><i class="iconfont icon-yinlianzhifu"></i>银行卡<i class="iconfont icon-xiala"></i></p>
+                                <dl class="czdl">
+                                    <template v-for="(d,j) in RechargeList">
+                                        <dd :key="j" v-if="d.type==3" v-on:click="rechargeSerial(d)">{{ d.title }}</dd>
+                                    </template>
+                                </dl>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <!-- <button id="dropOutBtn">登出</button> -->
             </div>
@@ -97,6 +118,7 @@ export default {
             showaddBankCardReturn:null,
             RechargeList:null,
             typeData:null,
+            czid:null,
         }
     },
     // html加载完成之前,执行,执行顺序：父组件-子组件
@@ -148,6 +170,10 @@ export default {
         rechargeSerial:function(d){
             this.typeData = d;
         },
+        qiehuan:function(n){
+            this.czid = n;
+            // this.czid==n ? this.czid = 0 : this.czid = n;
+        },
         // 获取所有充值方式
         getRechargeWays:function(){
             if(this.$store.state.clickHeadId==4){
@@ -174,15 +200,6 @@ export default {
         this.getRechargeWays();
     }
 }
-    // $('.Details_xiala').on('click',function(){
-    //     $(this).siblings('.user_988_list_body_tow_box').show();
-    // });
-    // $('.addBankCardReturn').on('click',function(){
-    //     $('.addBankCardMeun').animate({'left':'-100%'},function(){
-    //         $(this).hide();
-    //     })
-    // })
-    
 </script>
 <style scoped>
 .icon-jibenxinxi{font-size: 21px;left: -1px;}

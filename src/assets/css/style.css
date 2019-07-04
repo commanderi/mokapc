@@ -245,27 +245,29 @@ body{
 .SportsCompetition:hover .nav_a{
     color: #f20320;
 }
+.SportsCompetition
 .nav_list_ul{
-    display: none;
+    display: block;
     position: absolute;
     top: 42px;
     left: 0;
     right: 0;
     width: 100%;
+    height: auto;
+    max-height: 0px;
+    transition: max-height 650ms;
+    transition-timing-function: ease;
+    overflow: hidden;
     z-index: 99;
     background:rgba(18,18,26,0.85);
-    transition: 0.2s; 
-    -o-transition: 0.2s; 
-    -ms-transition: 0.2s; 
-    -moz-transition: 0.2s; 
-    -webkit-transition: 0.2s;
 }
 
 .indexNav:hover .nav_list_ul,
 .lotteryTicket:hover .nav_list_ul,
 .ElectronicGames:hover .nav_list_ul,
 .SportsCompetition:hover .nav_list_ul{
-    display: block;
+    /* display: block; */
+    max-height: 200px!important;
 }
 .nav_list_ul:before{
     content: '';
@@ -5019,3 +5021,82 @@ footer{
 .set-center{align-items: center;}
 .danshi{width: 100%;height: auto;min-height: 230px;margin: 10px;}
 .lf_tt{padding: 0 10px;}
+
+/* 充值 */
+.chongzhi{
+    width: 100%;
+    height: auto;
+}
+.chongzhit{
+    padding: 10px 0 10px 15px;
+    cursor: pointer;
+    display: flex;
+    align-items:center;
+    font-size: 17px;
+    transition: 0.2s; 
+    -o-transition: 0.2s; 
+    -ms-transition: 0.2s; 
+    -moz-transition: 0.2s; 
+    -webkit-transition: 0.2s;
+}
+.icon-iconzhi01,.icon-iconzhi02,.icon-yinlianzhifu{
+    font-size: 22px;
+    color: #5f5c5c;
+    padding-right: 5px;
+    transition: 0.2s; 
+    -o-transition: 0.2s; 
+    -ms-transition: 0.2s; 
+    -moz-transition: 0.2s; 
+    -webkit-transition: 0.2s;
+}
+.chongzhit>.icon-xiala{
+    margin-left: 5px;
+}
+.chongzhit:hover{
+    color: #f20320;
+}
+.chongzhit:hover .icon-iconzhi01{
+    color: rgb(0, 170, 238);;
+}
+.chongzhit:hover .icon-iconzhi02{
+    color: rgb(65, 170, 73);
+}
+.chongzhit:hover .icon-yinlianzhifu{
+    color: rgb(0, 72, 136);
+}
+.chongzhi>ul>li{
+    width: 100%;
+    height: auto;
+    max-height: 44px;
+    transition: max-height 750ms;
+    transition-timing-function: ease;
+    overflow-y: hidden;
+}
+.chongzhi_add{
+    max-height: 200px!important;
+}
+.czdl{
+    width: 100%;
+    height: auto;
+}
+.czdl>dd{
+    padding: 5px 0px 5px 20px;
+    cursor: pointer;
+}
+.czdl>dd:hover{
+    color: #f20320;
+}
+.op{
+    width: 100%;
+    height: 30px;
+    background-color: red;
+    transition:height 600ms;
+}
+.op_hover{
+	height:300px;
+}
+.mii{
+    font-style: normal;
+    padding-left: 20px;
+    font-size: 0.2rem;
+}

@@ -422,7 +422,7 @@ export default {
             this.clearUserArr();
             this.clearmyJson();
             this.NavOne_index = 0;
-            this.NavTwo_index = 1;
+            this.NavTwo_index = 91;
             clearInterval(this.lastTimeFn);
             clearInterval(this.timeFn);
         },
@@ -488,7 +488,7 @@ export default {
             this.NavOneData = data;
             this.NavTwoData = data.play_rule[0].odds[0];
             this.clearUserArr();
-            console.log('NavOneData',data);
+            // console.log('NavOneData',data);
         },
         // 点击二级菜单选择的数据
         selectTwoNav:function(i,data){
@@ -496,7 +496,7 @@ export default {
             this.bettingInfo.rate = data.rate;
             this.NavTwoData = data;
             this.clearUserArr();
-            console.log('NavTwoData',data);
+            // console.log('NavTwoData',data);
         },
         // 设置单笔投注金额
         setMoneyNumber:function(index){

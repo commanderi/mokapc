@@ -68,12 +68,14 @@
                 </div>
             </div>
             <template v-if="getBankID.is_online==1">
-                <p class="Recharge_tip">备注：尊敬的用户，充值的最小金额为<b>100元</b></p>
+                <!-- <b class="Recharge_tip">备注：尊敬的用户，充值的最小金额为<b>100元</b></p> -->
+                <p class="Recharge_tip">{{ getBankID.instructions }}</p>
                 <p class="Recharge_Im_p"><button id="submitRecharge_btn" v-on:click="beforeRecharge">提交申请</button></p>
             </template>
             <template v-else>
-                <p class="Recharge_tip" v-if="getBankID.type==3">备注：尊敬的用户，为了更快的通过充值审核，请务必如实填写充值金额与姓名</p>
-                <p class="Recharge_tip" v-else>备注：尊敬的用户，为了更快的通过充值审核，请务必如实填写<b>扫码充值</b>金额</p>
+                <!-- <p class="Recharge_tip" v-if="getBankID.type==3">备注：尊敬的用户，为了更快的通过充值审核，请务必如实填写充值金额与姓名</p> -->
+                <!-- <p class="Recharge_tip" v-else>备注：尊敬的用户，为了更快的通过充值审核，请务必如实填写<b>扫码充值</b>金额</p> -->
+                <p class="Recharge_tip">{{ getBankID.instructions }}</p>
                 <p class="Recharge_Im_p"><button id="submitRecharge_btn" v-on:click="do_charge">提交申请</button></p>
             </template>
         </template>
@@ -199,7 +201,7 @@ export default {
 }
 </script>
 <style scoped>
-.c_qrCode{width: 150px;height: 150px;margin: 10px auto;background-color: #fff;padding: 8px;}
+.c_qrCode{width: 200px;height: 200px;margin: 10px auto;background-color: #fff;padding: 8px;}
 .c_qrCode>img{width: 100%;height: 100%;}
 </style>
 
