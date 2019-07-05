@@ -89,16 +89,7 @@
         <!-- 线上支付跳转 -->
         <template v-if="oData!==null">
             <form :action="oData.tjurl" method="post">
-                <input type="hidden" name="pay_amount" :value="oData.native.pay_amount">
-                <input type="hidden" name="pay_applydate" :value="oData.native.pay_applydate">
-                <input type="hidden" name="pay_attach" :value="oData.native.pay_attach">
-                <input type="hidden" name="pay_bankcode" :value="oData.native.pay_bankcode">
-                <input type="hidden" name="pay_callbackurl" :value="oData.native.pay_callbackurl">
-                <input type="hidden" name="pay_md5sign" :value="oData.native.pay_md5sign">
-                <input type="hidden" name="pay_memberid" :value="oData.native.pay_memberid">
-                <input type="hidden" name="pay_notifyurl" :value="oData.native.pay_notifyurl">
-                <input type="hidden" name="pay_orderid" :value="oData.native.pay_orderid">
-                <input type="hidden" name="pay_productname" :value="oData.native.pay_productname">
+                <input type="hidden" v-for="(d,i) in oData.native" :key="i" :name="i" :value="d">
                 <input type="submit" value="" id="InitiatePayment" style="display:none">
             </form>
         </template>
