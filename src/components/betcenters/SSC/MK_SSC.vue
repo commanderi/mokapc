@@ -419,7 +419,7 @@
                         <span><button class="allClear" v-on:click="clearmyJson">全清</button></span>
                     </div>
                     <ul class="betResultList_ul">
-                        <li class="clear" v-for="(data,index) in myJson" :key="index">
+                        <li class="" v-for="(data,index) in myJson" :key="index">
                             <span>{{ data.name }}</span>
                             <span>{{ data.number }}</span>
                             <span>{{ data.note }}</span>
@@ -587,11 +587,14 @@ export default {
         },    
         // 监听单注金额input
         ononeMoney(e){
-            // console.log(e.data);
+            // 总金额=单注金额x注数x投注倍数
+            this.bettingInfo.singleMoney = this.oneMoney;
+            this.bettingInfo.allMoney = (this.bettingInfo.singleMoney*this.bettingInfo.bettingNumber)*this.bettingInfo.setMultipleNumber;
         },
         // 监听倍数input
         onsetMultipleNumber(e){
-            // console.log(e.data)
+            // 总金额=单注金额x注数x投注倍数
+            this.bettingInfo.allMoney = (this.bettingInfo.singleMoney*this.bettingInfo.bettingNumber)*this.bettingInfo.setMultipleNumber;
         },
         // 添加号码
         addNumberBtn:function(){
@@ -601,6 +604,7 @@ export default {
                 AssemblyData(this,2);
             }
         },
+        // 监听单式文本域
         ontextareaData:function(e){
             // console.log(e.data);
         },

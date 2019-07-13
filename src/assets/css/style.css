@@ -2185,6 +2185,8 @@ footer{
 .betResultList_ul>li{
     width: 100%;
     height: auto;
+    display: flex;
+    /* align-items: center; */
 }
 .betResultList_ul>li:nth-of-type(odd){
     background-color: #ffffff;
@@ -2194,21 +2196,23 @@ footer{
 }
 .betResultList_ul>li>span{
     color: #4c4c4c;
-    line-height: 30px;
-    height: 30px;
+    /* min-height: 30px; */
+    /* line-height: 30px; */
+    height: auto;
     float: left;
     text-align: center;
     display:block;
-    white-space:nowrap;
+    padding: 5px 0;
+    /* white-space:nowrap;
     overflow:hidden;
-    text-overflow:ellipsis;
+    text-overflow:ellipsis; */
 }
 .betResultList_ul>li>span:nth-of-type(1){
     width: 20%;
 }
 .betResultList_ul>li>span:nth-of-type(2){
     width: 35%;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 .betResultList_ul>li>span:nth-of-type(5){
     width: 15%;

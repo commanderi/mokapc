@@ -9,6 +9,7 @@ function getTextareaData(m){
     for (let i = 0; i < arr.length; i++) {
         successData.push(arr[i].split(''));
     }
+    // 十万注下面这个双重循环耗时500多ms
     for (let i = 0; i < successData.length; i++) {
         me.userArr.push(successData[i].map(Number));
         for (let j = 0; j < me.userArr[i].length; j++) {
@@ -18,7 +19,10 @@ function getTextareaData(m){
             }
         }
     }
-    me.userArr = spliceBetNumberArr(me.userArr,me.userArr.length);
+    console.time();
+    console.log(me.userArr.length)
+    me.userArr = spliceBetNumberArr(me.userArr,5); //十万注此处耗时40s
+    console.timeEnd();
     switch (me.NavTwo_index) {
         case 2:
             me.userArrLen = 5;
@@ -136,11 +140,10 @@ function singleSelect(e,y,x,me){
         case 67:case 68:
             me.bettingInfo.bettingNumber = rxz3z6(me);
         break;
-        
     }
     // 总金额=单注金额x注数x投注倍数
     me.bettingInfo.allMoney = (me.bettingInfo.singleMoney*me.bettingInfo.bettingNumber)*me.bettingInfo.setMultipleNumber;
-    console.log(me.userArr)
+    // console.log(me.userArr)
 };
 export{
     singleSelect
@@ -316,7 +319,7 @@ function AssemblyData(m,num){
             spliceBetNumberArr(xuanzheData,5);
         break;
     }
-    successData = (xuanzheData.join('|')).replace(/,/g,' ');
+    successData = (xuanzheData.join('|')).replace(/,/g,' '); //将近800ms
     switch (me.NavTwo_index) {
         case 63:case 64:case 66:case 67:case 68:case 69:case 71: //有选择'万千百十个'的情况
             for (let j = 0; j < me.rxArr.length; j++) {
@@ -339,6 +342,7 @@ function AssemblyData(m,num){
             successData = (me.userArrChinese[0].join(' ')).replace(/,/g,' ');
         break
     }
+    // console.log(successData)
     list = {
         number:successData,
         odd_play:me.NavTwoData.odd_play,
@@ -641,6 +645,7 @@ function factorial(m,n){
 };
 // 删除二维数组为空的数组(arr:数组,num:循环次数)
 function spliceBetNumberArr(arr, num) {
+    // console.time();
     for (let i = 0; i < num; i++) {
         for (let w = 0; w < arr.length; w++) {
             if(arr[w]!=null||arr[w]!=undefined){
@@ -650,6 +655,7 @@ function spliceBetNumberArr(arr, num) {
             }
         }
     }
+    // console.timeEnd();
     return arr
 };
 // 数组工具类
