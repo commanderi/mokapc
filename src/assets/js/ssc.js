@@ -19,8 +19,6 @@ function getTextareaData(m){
             }
         }
     }
-    console.time();
-    console.log(me.userArr.length)
     me.userArr = spliceBetNumberArr(me.userArr,5); //十万注此处耗时40s
     console.timeEnd();
     switch (me.NavTwo_index) {
@@ -645,7 +643,6 @@ function factorial(m,n){
 };
 // 删除二维数组为空的数组(arr:数组,num:循环次数)
 function spliceBetNumberArr(arr, num) {
-    // console.time();
     for (let i = 0; i < num; i++) {
         for (let w = 0; w < arr.length; w++) {
             if(arr[w]!=null||arr[w]!=undefined){

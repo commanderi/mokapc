@@ -76,7 +76,11 @@ export default {
                         if(this.userpassword==this.userpasswordS){
                             if(isPhone(this.userTel)){
                                 if(isEmpty(this.securityCodeNumber)){
-                                    this.reg()
+                                    if(isEmpty(this.inviteCode)){
+                                        this.reg()
+                                    }else{
+                                        layer.msg('请填写邀请码',{time:1200});
+                                    }
                                 }else{
                                     layer.msg('请填写验证码',{time:1200});
                                 }

@@ -122,7 +122,7 @@ function getTextareaData(m){
         layer.msg('选择的号码不合法',{time:950});
         return
     }
-    me.userArr = spliceBetNumberArr(me.userArr,me.userArr.length);
+    me.userArr = spliceBetNumberArr(me.userArr,5);
     // console.log(me.userArr)
     switch (me.NavTwo_index) {
         case 95:

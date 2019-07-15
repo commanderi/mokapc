@@ -38,8 +38,9 @@
                             <span class="UserManagement_caozuo">
                                 <i class="iconfont icon-more-op"></i>
                                 <ul class="UserManagement_caozuo_ul">
-                                    <li><button v-on:click="operating(d.id,d.mobile,1)">个人报表</button></li>
-                                    <li><button v-on:click="operating(d.id,d.mobile,2)">下级</button></li>
+                                    <li><button v-on:click="operating(d.id,d.mobile,2)">个人报表</button></li>
+                                    <li><button v-on:click="operating(d.id,d.mobile,3)">下级</button></li>
+                                    <li><button v-on:click="operating(d.id,d.mobile,4)">转账</button></li>
                                 </ul>
                             </span>
                         </li>
@@ -217,6 +218,24 @@
                 </table>
             </div>
         </div>
+        <!-- 给下级转账 -->
+        <div class="CreateNewUser_box" v-show="createMember==4">
+            <p class="user_h">
+                <a class="myuserlist" v-on:click="returnTop(1)">我的用户列表</a>
+                <i class="iconfont icon-next CreateNewUser_icon"></i>
+                <span>{{ bottomName }}</span>
+            </p>
+            <div class="CreateNewUser_box_con">
+                <div class="bankCard_input_box">
+                    <h6>转账给：<b style="color:red;font-size:22px">{{bottomName}}</b></h6>
+                    <input type="text" class="bankCardName" v-model="money" placeholder="请输入转账金额" maxlength="9" pattern="^[0-9]\w{1,9}$" onkeyup="value=value.replace(/[^0-9]/g,'')" onpaste="value=value.replace(/[^0-9]/g,'')" oncontextmenu="value=value.replace(/[^0-9]/g,'')">
+                </div>
+                <p class="CreateNewUser_bottom_p">
+                    <button class="cancelCreateNewUser_btn" v-on:click="returnTop(1)">取消</button>
+                    <button class="CreateNewUser_btn" v-on:click="transfertoLower">确认转账</button>
+                </p>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -246,6 +265,7 @@ export default {
             time:thisDay(),
             me:thisDay(),
             laypage:null,
+            money:null,
         }
     },
     // html加载完成之前执行,执行顺序：父组件-子组件
@@ -312,12 +332,34 @@ export default {
         operating:function(id,name,num){
             this.bottomVip = id;
             this.bottomName = name;
-            if(num==1){
-                this.createMember = 2;
+            this.createMember = num;
+            if(num==2){
                 this.getAccountDetail();
-            }else{
-                this.createMember = 3;
+            }else if(num==3){
                 this.getMyJunior();
+            }
+        },
+        // 给下级转账
+        transfertoLower:function(){
+            if(this.money==null||this.money<=0){
+                layer.msg('转账金额必须大于0');
+            }else{
+                this.$http({
+                    method: 'post',
+                    url: this.$store.state.postUrl+'money/transfer_to_lower',
+                    data: {'token':this.userToken,'uid':this.userId,'lower_uid':this.bottomVip,'money':this.money}
+                })
+                .then(res => {
+                    if(res.data.ret==200){
+                        layer.msg(res.data.msg);
+                        this.returnTop(1);
+                    }else{
+                        layer.msg(res.data.msg);
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
             }
         },
         // 添加下级会员
@@ -386,6 +428,7 @@ export default {
             this.listData = '';
             this.meListData = '';
             this.bottomVip = '';
+            this.money = null;
             if(n==1){
                 this.getMyJunior();
             }
