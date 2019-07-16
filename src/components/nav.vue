@@ -3,9 +3,6 @@
     <nav id="nav">
         <div class="SportsCompetition">
             <router-link class="nav_a" to="/">首页</router-link>
-            <ul class="nav_list_ul">
-                <li v-on:click="getKefu"><a>在线客服</a></li>
-            </ul>
         </div>
         <div class="SportsCompetition">
             <router-link class="nav_a" to="/betcenter">购买彩票</router-link>
@@ -118,24 +115,7 @@ export default {
                 }
             }
         },
-        getKefu:function(){
-            this.$http({
-                method: 'post',
-                url: this.$store.state.postUrl+'login/get_kefu',
-                data: {'token':this.userToken,'uid':this.userId}
-            })
-            .then(res => {
-                if(res.data.ret==200){
-                    window.open(res.data.data.kefu);
-                }else{
-                    layer.msg(res.data.msg);
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            })
-            
-        }
+        
     },
     // html加载完成之后执行
     mounted(){
@@ -159,7 +139,6 @@ export default {
                 this.getThirdUrl();
             }
         };
-        
     }
 }
 </script>

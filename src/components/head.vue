@@ -8,13 +8,13 @@
             </router-link>
         </div>
         <div class="header_top_con header_top_logIn_con clear">
-            <!-- <a v-on:click="handleClicks(6)" :class="{actives:6===limit}">
+            <!-- <a>
                 <i class="iconfont icon-qianbao"></i>
-                <span>中心钱包</span>
             </a> -->
+            <span class="yuee">余额：{{ money }}<button v-on:click="getMymoney"><i class="iconfont icon-shuaxin"></i></button></span>
             <a v-on:click="handleClicks(8)" :class="{actives:8===limit}">
                 <i class="iconfont icon-ico_print"></i>
-                <span>账户余额</span>
+                <span>账户明细</span>
             </a>
             <a v-on:click="handleClicks(4)" :class="{actives:4===limit}">
                 <i class="iconfont icon-chongzhi"></i>
@@ -73,7 +73,10 @@ export default {
     name: 'index',
     data () {
         return {
+            userId:null,
+            userToken:null,
             limit:0,
+            money:0,
             loginStatus: null, //登录状态
         }
     },
@@ -94,6 +97,24 @@ export default {
             }else{
                 this.loginStatus = false;
             }
+        },
+        // 获取用户信息
+        getMymoney:function(){
+            this.$http({
+                method: 'post',
+                url: this.$store.state.postUrl+'personal/get_personal_info',
+                data: {'token':this.userToken,'uid':this.userId}
+            })
+            .then(res => {
+                if(res.data.ret==200){
+                    this.money = res.data.data.money;
+                }else{
+                    layer.msg(res.data.msg,{time:1200});
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
         },
         clearData:function(status){
             this.loginStatus = status;
@@ -126,6 +147,23 @@ export default {
     },
     mounted() {
         this.showAndhide();
+        getuserIdToken:{
+            this.userId = localStorage.getItem('userId');
+            this.userToken = localStorage.getItem('userToken');
+            if(this.userId==null || this.userId==undefined){
+                layer.msg('没有获取到您的用户id,请重新登录重试',function(){
+                    window.location.href = 'http://www.vs04o.cn';
+                });
+                return
+            }else if(this.userToken==null || this.userToken==undefined){
+                layer.msg('没有获取到您的用户token,请重新登录重试',function(){
+                    window.location.href = 'http://www.vs04o.cn';
+                });
+                return
+            }else{
+                this.getMymoney();
+            }
+        };
     },
     computed: {
 
@@ -133,7 +171,9 @@ export default {
 }
 </script>
 <style scoped>
-
+.yuee{color: #fff;}
+.icon-shuaxin{font-size: 17px;font-weight: bold;}
+.yuee>button{border: 0px solid #fff;width: 24px;height: 22px;cursor: pointer;text-align: center;line-height: 23px;border-radius: 3px;background:#fff;margin-left: 10px;}
 </style>
 
 

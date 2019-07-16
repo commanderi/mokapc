@@ -68,20 +68,8 @@
                     <input type="text" class="bankCardName" v-model="pwd" max="6" min="1" maxlength="6" pattern="^[0-9]\w{1,7}$" onkeyup="value=value.replace(/[^0-9]/g,'')" onpaste="value=value.replace(/[^0-9]/g,'')" oncontextmenu="value=value.replace(/[^0-9]/g,'')">
                 </div>
                 <div class="bankCard_input_box clear">
-                    <div class="RadioUserType clear">
-                        <p class="RadioUserType_title">用户类别</p>
-                        <!-- <button class="RadioUserType_btn" v-on:click="qiehuan(0)" :class="{RadioUserType_this:showOrhide==0}">
-                            <i class="iconfont" v-bind:class="showOrhide==0 ? 'icon-zu' : 'icon-weixuanzhong'"></i>
-                            <span>会员</span>
-                        </button> -->
-                        <button class="RadioUserType_btn" v-on:click="qiehuan(1)" :class="{RadioUserType_this:showOrhide==1}">
-                            <i class="iconfont" v-bind:class="showOrhide==1 ? 'icon-zu' : 'icon-weixuanzhong'"></i>
-                            <span>代理</span>
-                        </button>
-                    </div>
                     <div class="setUserRebate">
                         <p class="setUserRebate_title">彩票返点 (赔率%)</p>
-                        <!-- <span class="setUserRebate_number">1960 (98.0%)</span> -->
                         <template v-if="sliderValue!=null || BackRebatesList!==null">
                             <span class="setUserRebate_number">
                                 <template v-for="s in BackRebatesList">
@@ -94,6 +82,30 @@
                         </template>
                         <div class="ratioCtrl_Slider setUserRebate_la" data-before='' data-after=''>
                             <div id="setUserRebate_number" class="demo-slider">
+                                <div class="layui-slider ">
+                                    <div class="layui-slider-bar"></div>
+                                    <div class="layui-slider-wrap">
+                                        <div class="layui-slider-wrap-btn"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setUserRebate">
+                        <p class="setUserRebate_title">工资返点</p>
+                        <template v-if="sliderValue2!=null || wageList!==null">
+                            <span class="setUserRebate_number">
+                                <template v-for="s in wageList">
+                                    <template v-if="s.percent==sliderValue2+'%'">
+                                        {{ mebase = s.base }}
+                                    </template>
+                                </template>
+                                ({{ sliderValue2 }}%)
+                            </span>
+                        </template>
+                        <div class="ratioCtrl_Slider2 setUserRebate_la" data-before='' data-after=''>
+                            <div id="setUserRebate_number2" class="demo-slider">
                                 <div class="layui-slider ">
                                     <div class="layui-slider-bar"></div>
                                     <div class="layui-slider-wrap">
@@ -258,7 +270,9 @@ export default {
             mebase:null,
             meListData:null,
             BackRebatesList:null,
+            wageList:null,
             sliderValue:null, //滑动的值
+            sliderValue2:null,
             bottomVip:'', //下级会员
             bottomName:'',
             exp:'',
@@ -374,13 +388,16 @@ export default {
                 layer.msg('密码不能为空');
                 return
             }else if(!isEmpty(this.mebase)){
-                layer.msg('请设置返点基数');
+                layer.msg('请设置彩票返点基数');
+                return
+            }else if(!isEmpty(this.sliderValue2)){
+                layer.msg('请设置工资返点基数');
                 return
             }else{
                 this.$http({
                     method: 'post',
                     url: this.$store.state.postUrl+'agent/new_member',
-                    data: {'token':this.userToken,'uid':this.userId,'mobile':this.username,'password':this.pwd,'base':this.mebase}
+                    data: {'token':this.userToken,'uid':this.userId,'mobile':this.username,'password':this.pwd,'base':this.mebase,'wage_percent':this.sliderValue2/100}
                 })
                 .then(res => {
                     if(res.data.ret==200){
@@ -469,19 +486,13 @@ export default {
                 }
             });
         });
+        
         // 下级会员返点列表
-        this.$http({
-            method: 'post',
-            url: this.$store.state.postUrl+'agent/get_back_rebates',
-            data: {'token':this.userToken,'uid':this.userId}
-        })
+        this.$http({method: 'post',url: this.$store.state.postUrl+'agent/get_back_rebates',data: {'token':this.userToken,'uid':this.userId}})
         .then(res => {
             if(res.data.ret==200){
                 this.BackRebatesList = res.data.data;
-                let num = null;
-                for (let i = 0; i < this.BackRebatesList.length; i++) {
-                    num = i;
-                }
+                const num = this.BackRebatesList.length-1;
                 layui.use('slider', function(){
                     var slider = layui.slider;
                     slider.render({
@@ -493,6 +504,34 @@ export default {
                         change: function(value){
                             me.sliderValue = Number(me.BackRebatesList[num].percent.replace(/%/,''))+value/10;
                             $('.ratioCtrl_Slider').attr({'data-before':me.BackRebatesList[num].percent.replace(/%/,''),'data-after': me.sliderValue});
+                        }
+                    });
+                });
+            }else{
+                layer.msg(res.data.msg);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
+        // 下级会员工资返点列表
+        this.$http({method: 'post',url: this.$store.state.postUrl+'agent/get_wage_rebates',data: {'token':this.userToken,'uid':this.userId}})
+        .then(res => {
+            if(res.data.ret==200){
+                this.wageList = res.data.data;
+                const num = this.wageList.length-1;
+                layui.use('slider', function(){
+                    var slider2 = layui.slider;
+                    slider2.render({
+                        elem: '#setUserRebate_number2',
+                        theme: '#f10320',
+                        min: 0,
+                        max: num,
+                        tips: false,
+                        change: function(value){
+                            let tem = Number(me.wageList[num].percent.replace(/%/,''))+value/10;
+                            me.sliderValue2 = tem.toFixed(1);
+                            $('.ratioCtrl_Slider2').attr({'data-before':Math.round(me.wageList[num].percent.replace(/%/,'')*100)/100,'data-after': me.sliderValue2});
                         }
                     });
                 });

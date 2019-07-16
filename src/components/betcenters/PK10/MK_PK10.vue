@@ -567,18 +567,17 @@ export default {
                 })
                 .then(res => {
                     if(res.data.ret==200){
-                        layer.msg(res.data.msg);
-                        // this.clearUserArr();
+                        layer.alert(res.data.msg,{title: '投注提示',icon: 1,skin: 'layer-ext-moon'});
                         this.clearmyJson();
                     }else{
-                        layer.msg(res.data.msg);
+                        layer.alert(res.data.msg,{title: '投注提示',icon: 2,skin: 'layer-ext-moon'});
                     }
                 })
                 .catch(err => {
-                    layer.msg('投注出错,请重试:'+err);
+                    layer.alert('投注出错,请重试:'+err,{title: '投注提示',icon: 2,skin: 'layer-ext-moon'});
                 })
             }else{
-                layer.msg('未登录，无法投注');
+                layer.alert('未登录，无法投注',{title: '提示',icon: 2,skin: 'layer-ext-moon'});
             }
         },
         // 立即投注
@@ -587,7 +586,7 @@ export default {
                 let userToken = localStorage.getItem('userToken');
                 let uid = localStorage.getItem('userId');
                 if(this.myObj==null||this.myObj==''){
-                    layer.msg('选择的数据不能为空');
+                    layer.alert('选择的数据不能为空',{title: '提示',icon: 2,skin: 'layer-ext-moon'});
                     return
                 }else{
                     this.$http({
@@ -597,19 +596,19 @@ export default {
                     })
                     .then(res => {
                         if(res.data.ret==200){
-                            layer.msg(res.data.msg);
+                            layer.alert(res.data.msg,{title: '投注提示',icon: 1,skin: 'layer-ext-moon'});
                             this.clearUserArr();
                             this.myObj = [];
                         }else{
-                            layer.msg(res.data.msg);
+                            layer.alert(res.data.msg,{title: '投注提示',icon: 2,skin: 'layer-ext-moon'});
                         }
                     })
                     .catch(err => {
-                        layer.msg('投注出错,请重试:'+err);
+                        layer.alert('投注出错,请重试:'+err,{title: '投注提示',icon: 2,skin: 'layer-ext-moon'});
                     })
                 }
             }else{
-                layer.msg('未登录，无法投注');
+                layer.alert('未登录，无法投注',{title: '提示',icon: 2,skin: 'layer-ext-moon'});
             }
         },
         // 获取最近10期的开奖结果
@@ -627,7 +626,7 @@ export default {
                 }
             })
             .catch(err => {
-                console.log('获取最近10期开奖结果出错:'+err);
+                layer.msg('获取最近10期开奖结果出错:'+err);
             })
         },
         // 获取当前期数倒计时时间，并调用倒计时开始计时
@@ -653,7 +652,7 @@ export default {
                 layer.closeAll('loading');
             })
             .catch(err => {
-                console.log('获取当前期数倒计时出错:'+err);
+                layer.msg('获取当前期数倒计时出错:'+err);
                 layer.closeAll('loading');
             })
         },
@@ -673,7 +672,6 @@ export default {
                         if(res.data.ret==200){
                             this.data.lastOneNumber = res.data.data;
                         }else{
-                            // console.log('未获取到上一期开奖号码');
                             switch (Number(this.$store.state.specificTypeID[0])) {
                                 case 3: //北京pk10
                                     this.forTime = 20000;
@@ -687,7 +685,7 @@ export default {
                         }
                     })
                     .catch(err => {
-                        console.log('获取上一期开奖号码出错:'+err);
+                        layer.msg('获取上一期开奖号码出错:'+err);
                     })
                 }
             }, this.forTime);
