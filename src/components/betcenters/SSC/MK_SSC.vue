@@ -735,6 +735,7 @@ export default {
                 // 选择了多个之后，并已经添加到底部，开始投注
                 let userToken = localStorage.getItem('userToken');
                 let uid = localStorage.getItem('userId');
+                layer.open({type:3});
                 this.$http({
                     method: 'post',
                     url: this.$store.state.postUrl+'lottery/betting',
@@ -742,13 +743,17 @@ export default {
                 })
                 .then(res => {
                     if(res.data.ret==200){
+                        layer.closeAll('loading');
                         layer.alert(res.data.msg,{title: '投注提示',icon: 1,skin: 'layer-ext-moon'});
                         this.clearmyJson();
+                        this.$emit('getUserMoney');
                     }else{
+                        layer.closeAll('loading');
                         layer.alert(res.data.msg,{title: '投注提示',icon: 2,skin: 'layer-ext-moon'});
                     }
                 })
                 .catch(err => {
+                    layer.closeAll('loading');
                     layer.alert('投注出错,请重试:'+err,{title: '投注提示',icon: 2,skin: 'layer-ext-moon'});
                 })
             }else{
@@ -764,6 +769,7 @@ export default {
                     layer.alert('选择的数据不能为空',{title: '提示',icon: 2,skin: 'layer-ext-moon'});
                     return
                 }else{
+                    layer.open({type:3});
                     this.$http({
                         method: 'post',
                         url: this.$store.state.postUrl+'lottery/betting',
@@ -771,14 +777,18 @@ export default {
                     })
                     .then(res => {
                         if(res.data.ret==200){
+                            layer.closeAll('loading');
                             layer.alert(res.data.msg,{title: '投注提示',icon: 1,skin: 'layer-ext-moon'});
                             this.clearUserArr();
                             this.myObj = [];
+                            this.$emit('getUserMoney');
                         }else{
+                            layer.closeAll('loading');
                             layer.alert(res.data.msg,{title: '投注提示',icon: 2,skin: 'layer-ext-moon'});
                         }
                     })
                     .catch(err => {
+                        layer.closeAll('loading');
                         layer.alert('投注出错,请重试:'+err,{title: '投注提示',icon: 2,skin: 'layer-ext-moon'});
                     })
                 }

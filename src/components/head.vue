@@ -7,11 +7,11 @@
                 <img src="../assets/img/logo.png">
             </router-link>
         </div>
-        <div class="header_top_con header_top_logIn_con clear">
+        <div :class="['header_top_con header_top_logIn_con clear', dd ? 'ccc' : '']">
             <!-- <a>
                 <i class="iconfont icon-qianbao"></i>
             </a> -->
-            <span class="yuee">余额：{{ money }}<button v-on:click="getMymoney"><i class="iconfont icon-shuaxin"></i></button></span>
+            <span class="yuee">余额：{{ money }}<button v-on:click="getMymoney"><i class="iconfont icon-shuaxin zzz"></i></button></span>
             <a v-on:click="handleClicks(8)" :class="{actives:8===limit}">
                 <i class="iconfont icon-ico_print"></i>
                 <span>账户明细</span>
@@ -78,6 +78,7 @@ export default {
             limit:0,
             money:0,
             loginStatus: null, //登录状态
+            dd:false,
         }
     },
     methods:{
@@ -100,6 +101,7 @@ export default {
         },
         // 获取用户信息
         getMymoney:function(){
+            $('.zzz').addClass('zhuan');
             this.$http({
                 method: 'post',
                 url: this.$store.state.postUrl+'personal/get_personal_info',
@@ -108,7 +110,9 @@ export default {
             .then(res => {
                 if(res.data.ret==200){
                     this.money = res.data.data.money;
+                    $('.zzz').removeClass('zhuan');
                 }else{
+                    // layer.tips('刷新失败', '.yuee', {tips: [1, '#bbbbbb'],time: 700});
                     layer.msg(res.data.msg,{time:1200});
                 }
             })
@@ -143,6 +147,14 @@ export default {
             this.limit = id;
             this.$store.commit("increment",true);
             this.$store.commit("increment",id);
+        },
+        getPath(){
+            console.log(this.$route.path);
+            if(this.$route.path=='/betcenter'){
+                this.dd = true;
+            }else{
+                this.dd = false;
+            }
         }
     },
     mounted() {
@@ -162,18 +174,45 @@ export default {
                 return
             }else{
                 this.getMymoney();
+                this.getPath()
             }
         };
     },
     computed: {
 
-    }
+    },
 }
 </script>
 <style scoped>
-.yuee{color: #fff;}
-.icon-shuaxin{font-size: 17px;font-weight: bold;}
-.yuee>button{border: 0px solid #fff;width: 24px;height: 22px;cursor: pointer;text-align: center;line-height: 23px;border-radius: 3px;background:#fff;margin-left: 10px;}
+.yuee{
+    color: #fff;
+}
+.ccc{
+    margin-right:7.5%;
+}
+.icon-shuaxin{
+    font-size: 17px;
+    font-weight: bold;
+    display: block;
+}
+.zhuan{
+    animation: turnX 1200ms linear infinite;
+}
+.yuee>button{
+    border: 0px solid #fff;
+    width: 24px;
+    height: 22px;
+    cursor: pointer;
+    text-align: center;
+    line-height: 23px;
+    border-radius: 3px;
+    background:#fff;
+    margin-left: 10px;
+}
+@keyframes turnX{
+    0%{transform:rotateZ(0deg)}
+    100%{transform:rotateZ(360deg)}
+}
 </style>
 
 

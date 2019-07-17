@@ -90,69 +90,63 @@ export{
 // 处理单式文本域输入值
 function getTextareaData(m){
     const me = m.$data;
-    switch (me.NavTwo_index) {
-        case 95:
-            me.userArr = [[],[]];            
-        break;
-        case 98:
-            me.userArr = [[],[],[],[]];            
-        break;
-        case 101:
-            me.userArr = [[],[],[],[]];            
-        break;
-        case 103:
-            me.userArr = [[],[],[],[],[]];            
-        break;
-        default:
-            me.userArr = [];
-        break;
-    }
+    me.userArr = [];
     let arr = me.textareaData.split(' ');
-    try {
-        for (let i = 0; i < arr.length; i++) {
-            for (let j = 0; j < arr[i].length/2; j++) {
-                me.userArr[i][j] = arr[i].slice(j*2,(j*2)+2);
-                if(!Number(me.userArr[i][j])){
-                    layer.msg('请输入阿拉伯数字或正整数',{time:1600});
-                    return
-                }
+    let meArr = [];
+    for (let i = 0; i < arr.length; i++) {
+        for (let j = 0; j < arr[i].length; j++) {
+            if(arr[i].slice(j*2,(j*2)+2)){
+                meArr.push(arr[i].slice(j*2,(j*2)+2));
             }
         }
-    } catch (error) {
-        layer.msg('选择的号码不合法',{time:950});
-        return
     }
     me.userArr = spliceBetNumberArr(me.userArr,5);
-    // console.log(me.userArr)
-    switch (me.NavTwo_index) {
-        case 95:
-            if(me.userArr.length!=2){
-                layer.msg('选择的号码不合法',{time:950});
-                return
+    for (let i = 0; i < meArr.length/2; i++) {
+        if(me.NavTwo_index==95){
+            me.userArr.push(meArr[i*2]+' '+meArr[(i*2)+1]);
+        }else if(me.NavTwo_index==98){
+            if(meArr[i*3]){
+                me.userArr.push(meArr[i*3]+' '+meArr[(i*3)+1]+' '+meArr[(i*3)+2]);
             }
-        break;
-        case 98:
-            if(me.userArr.length!=3){
-                layer.msg('选择的号码不合法',{time:950});
-                return
+        }else if(me.NavTwo_index==101){
+            if(meArr[i*4]){
+                me.userArr.push(meArr[i*4]+' '+meArr[(i*4)+1]+' '+meArr[(i*4)+2]+' '+meArr[(i*4)+3]);
             }
-        break;
-        case 101:
-            if(me.userArr.length!=4){
-                layer.msg('选择的号码不合法',{time:950});
-                return
+        }else if(me.NavTwo_index==103){
+            if(meArr[i*5]){
+                me.userArr.push(meArr[i*5]+' '+meArr[(i*5)+1]+' '+meArr[(i*5)+2]+' '+meArr[(i*5)+3]+' '+meArr[(i*5)+4]);
             }
-        break;
-        case 103:
-            if(me.userArr.length!=5){
-                layer.msg('选择的号码不合法',{time:950});
-                return
-            }
-        break;
-        default:
-        break;
+        }
     }
-    me.bettingInfo.bettingNumber = qian2_3_4_5(me.NavTwo_index,me.userArr);
+    for (let i = 0; i < me.userArr.length; i++) {
+        switch (me.NavTwo_index) {
+            case 95:
+                if(me.userArr[i].length!=5){
+                    layer.msg('选择的号码不合法',{time:950});
+                    return
+                }
+            break;
+            case 98:
+                if(me.userArr[i].length!=8){
+                    layer.msg('选择的号码不合法',{time:950});
+                    return
+                }
+            break;
+            case 101:
+                if(me.userArr[i].length!=11){
+                    layer.msg('选择的号码不合法',{time:950});
+                    return
+                }
+            break;
+            case 103:
+                if(me.userArr[i].length!=14){
+                    layer.msg('选择的号码不合法',{time:950});
+                    return
+                }
+            break;
+        }
+    }
+    me.bettingInfo.bettingNumber = me.userArr.length;
     me.bettingInfo.allMoney = (me.bettingInfo.singleMoney*me.bettingInfo.bettingNumber)*me.bettingInfo.setMultipleNumber;
     AssemblyData(m,2);
 };
@@ -170,14 +164,6 @@ function AssemblyData(m,num){
         if(me.userArr[i]!=undefined||me.userArr[i]!=null){
             xuanzheData[i] = me.userArr[i];
         }
-    }
-    switch (me.NavTwo_index) {
-        case 91:case 92:
-            
-        break;
-        default:
-            spliceBetNumberArr(xuanzheData,5);
-        break;
     }
     successData = (xuanzheData.join('|')).replace(/,/g,' ');
     list = {

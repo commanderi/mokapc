@@ -33,7 +33,7 @@
                             <span class="text_no">有效投注金额</span>
                             <span>总派彩</span>
                             <span>总优惠</span>
-                            <span>返点金额</span>
+                            <span>工资</span>
                             <span>总佣金</span>
                             <span>总提现</span>
                             <span>盈利总额</span>

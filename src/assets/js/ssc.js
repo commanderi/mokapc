@@ -20,7 +20,6 @@ function getTextareaData(m){
         }
     }
     me.userArr = spliceBetNumberArr(me.userArr,5); //十万注此处耗时40s
-    console.timeEnd();
     switch (me.NavTwo_index) {
         case 2:
             me.userArrLen = 5;

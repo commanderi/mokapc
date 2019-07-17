@@ -8,9 +8,9 @@
             <!-- 此处引入页面主要部分 -->
             <template v-if="betcenter_Content">
                 <!-- pk10 -->
-                <PK10 v-if="showMe==3 || showMe==4" ref="borther"></PK10>
+                <PK10 v-if="showMe==3 || showMe==4" ref="borther" v-on:getUserMoney="getuser"></PK10>
                 <!-- 时时彩 -->
-                <SSC v-if='showMe && (showMe!=3 && showMe!=4)' ref="borther"></SSC>
+                <SSC v-if='showMe && (showMe!=3 && showMe!=4)' ref="borther" v-on:getUserMoney="getuser"></SSC>
             </template>
             <!-- 热门彩种表格 -->
             <betcenter-HotTable v-if="betcenter_Hot" v-on:controlHot="controlMe" v-on:transferTofather="fatherReceive"></betcenter-HotTable>
@@ -66,6 +66,9 @@ export default {
             this.betcenter_Hot = data;
             this.betcenter_Content = !data;
         },
+        getuser() {
+            this.$refs.loginMaskChuan.getMymoney();
+        },
         // 子组件betcenterMenu传递过来的事件
         fatherReceive(a,b) {
             // if(b==3||b==4){
@@ -105,8 +108,7 @@ export default {
 }
 
 </script>
-<style>
-.header_top_logIn_con{margin-right: 7.5%;}
+<style scoped>
 /* .header_top_logIn{background-color: rgba(0,0,0,0.75)} */
 </style>
 

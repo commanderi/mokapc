@@ -25,35 +25,34 @@
                     <ul class="user_988_list_title">
                         <li class="clear">
                             <span>用户</span>
-                            <span>上级代理</span>
-                            <span>总充值</span>
-                            <span>总提现</span>
-                            <span>转入</span>
-                            <span>转出</span>
+                            <span>充值金额</span>
+                            <span>提现金额</span>
+                            <span>代理转入</span>
+                            <span>代理转出</span>
                             <span>总投注</span>
-                            <span class="text_no">有效投注金额</span>
-                            <span>总派彩</span>
+                            <span>总中奖</span>
                             <span>总优惠</span>
-                            <span>返点金额</span>
-                            <span>盈利总额</span>
-                            <!-- <span>操作</span> -->
+                            <span>总工资</span>
+                            <span>总盈亏</span>
+                            <span>总佣金</span>
+                            <span>上级用户名</span>
                         </li>
                     </ul>
                     <ul class="user_988_list_body">
                         <template v-if="listData!==null">
-                        <li class="clear">
-                            <span>{{ listData.mobile }}</span>
-                            <span>-</span>
-                            <span>￥{{ listData.recharge_total }}</span>
-                            <span>￥{{ listData.withdraw_total }}</span>
-                            <span>￥{{ listData.transfer_in }}</span>
-                            <span>￥{{ listData.transfer_out }}</span>
-                            <span>￥{{ listData.betting_money }}</span>
-                            <span>￥{{ listData.betting_money }}</span>
-                            <span>￥{{ listData.winning_money }}</span>
-                            <span>￥{{ listData.sale_money }}</span>
-                            <span>￥{{ listData.back_money}}</span>
-                            <span>￥{{ listData.win_lose }}</span>
+                        <li class="clear" v-for="(d,i) in listData" :key="i">
+                            <span>{{ d.mobile }}</span>
+                            <span>￥{{ d.recharge_total }}</span>
+                            <span>￥{{ d.withdraw_total }}</span>
+                            <span>￥{{ d.transfer_in }}</span>
+                            <span>￥{{ d.transfer_out }}</span>
+                            <span>￥{{ d.betting_money }}</span>
+                            <span>￥{{ d.winning_money }}</span>
+                            <span>￥{{ d.sale_money }}</span>
+                            <span>￥{{ d.back_money}}</span>
+                            <span>￥{{ d.win_lose }}</span>
+                            <span>￥{{ d.yj_money }}</span>
+                            <span>{{ d.up_mobile }}</span>
                             <!-- <span><button id="query_personal_btn" v-on:click="toPersonal()">个人报表</button></span> -->
                         </li>
                         </template>
@@ -160,6 +159,7 @@ export default {
             .then(res => {
                 if(res.data.ret==200){
                     this.listData = res.data.data;
+                    console.log(this.listData)
                 }else{
                     layer.msg(res.data.msg);
                 }
@@ -218,7 +218,12 @@ export default {
 </script>
 <style scoped>
 .user_988_list_title>li>span,
-.user_988_list_body>li>span{width: 7.692%;}
+.user_988_list_body>li>span{width: 8.333%;}
 #query_personal_btn{padding: 3px 4px;font-size: 12px;}
+.user_988_list_body{
+    height: auto;
+    max-height: 360px;
+    overflow-y: auto;
+}
 </style>
 
