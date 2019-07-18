@@ -5133,3 +5133,11 @@ footer{
     padding-left: 20px;
     font-size: 0.2rem;
 }
+.layer-ext-moon>.layui-layer-title{
+    color: #ffffff;
+    background-color: #f20320;
+}
+.layer-ext-moon>.layui-layer-btn->.layui-layer-btn0{
+    border-color: #f20320;
+    background-color: #f20320;
+}

@@ -904,6 +904,9 @@ export default {
     mounted(){
         this.myresize();
         this.getNextTotteryTime();
+        // layer.alert({
+        //     skin: 'demo-class'
+        // });
     },
 }
 </script>
