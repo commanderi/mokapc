@@ -20,6 +20,12 @@
                 <select id="LotteryStatus_select" v-on:change="getSelVal">
                     <option v-for="(d,i) in selectArr" :key="i" :value="i">{{ d }}</option>
                 </select>
+                <label class="chaxiaji">查询下级：</label>
+                <span class="bao">
+                    <input class="xiaxiajiinput" type="text" v-model="mobile" v-on:input="onmobile" placeholder="此处为空时,查询自己的记录">
+                    <i class="iconfont icon-guanbi qing" v-show="mobile" v-on:click="clearmobile"></i>
+                </span>
+                <button v-on:click="chaxun" :class="['cxBtn ',mobile==''?'cxBtn_no':'cxBtn_yes']" :disabled='disabled'>查询</button>
             </div>
             <div class="user_988_table">
                 <div class="user_988_table_top_nav clear">
@@ -154,7 +160,8 @@
                                     <span>{{ xData.note }}</span>
                                     <span>{{ xData.money }}</span>
                                     <template v-if="xData.state==1">
-                                        <span>{{ xData.code==1 ? '已中奖' : '未中奖' }}</span>
+                                        <!-- <span>{{ xData.code==1 ? '已中奖' : '未中奖' }}</span> -->
+                                        <span>{{ xData.z_money }}</span>
                                     </template>
                                     <template v-else>
                                         <span>未开奖</span>
@@ -189,6 +196,8 @@ export default {
             selectArr:['全部','已中奖','未中奖','已取消','待开奖'],
             xData:null,
             laypage:null,
+            mobile:'', //要查询的下级用户名
+            disabled:true,
         }
     },
     // html加载完成之前执行,执行顺序：父组件-子组件
@@ -207,6 +216,17 @@ export default {
         getSelVal:function(obj){
             this.serechType = obj.target.value;
             this.getBettingRecord();
+        },
+        clearmobile:function(){
+            this.mobile = '';
+            this.disabled = true;
+        },
+        onmobile:function(){
+            if(this.mobile==null||this.mobile==''){
+                this.disabled = true;
+            }else{
+                this.disabled = false;
+            }
         },
         // 取消订单
         cancelOrder:function(id){
@@ -263,6 +283,13 @@ export default {
                 console.log(err);
             })
         },
+        chaxun:function(){
+            if(this.mobile==null||this.mobile==''){
+                layer.msg('请输入下级用户名');
+            }else{
+                this.getBettingRecord();
+            }
+        },
         // 获取投注记录
         getBettingRecord:function(page=1){
             layer.open({type:3});
@@ -270,7 +297,7 @@ export default {
             this.$http({
                 method: 'post',
                 url: this.$store.state.postUrl+'lottery/betting_record',
-                data: {'token':this.userToken,'uid':this.userId,'start_time':this.startTime,'end_time':this.endTime,'type':this.serechType,'page':page}
+                data: {'token':this.userToken,'uid':this.userId,'start_time':this.startTime,'end_time':this.endTime,'type':this.serechType,'page':page,'mobile':this.mobile}
             })
             .then(res => {
                 if(res.data.ret==200){
@@ -470,5 +497,6 @@ export default {
 #LotteryStatus_select>option{text-align: center;margin: 5px 0;}
 .bettingRecord_tbody{width: 100%;max-height: 400px;overflow-y: auto;display: block;}
 .then{cursor: pointer;}
+#test8{height: 31px;}
 </style>
 

@@ -5141,3 +5141,57 @@ footer{
     border-color: #f20320;
     background-color: #f20320;
 }
+.chaxiaji{
+    margin-left: 58px;
+}
+.xiaxiajiinput{
+    width: auto;
+    min-width: 120px;
+    height: 29px;
+    border-radius: 3px;
+    padding-left: 8px;
+    padding-right: 21px;
+    border: 1px solid #ccc;
+}
+.bao{
+    position: relative;
+}
+.qing{
+    position: absolute;
+    right: 10px;
+    top: 2px;
+    font-size: 12px;
+    cursor: pointer;
+}
+.cxBtn{
+    width: auto;
+    height: 29px;
+    border-radius: 3px;
+    padding: 0 6px;
+    cursor: pointer;
+    color: #fff;
+}
+.cxBtn_yes{
+    border: 1px solid #f20320;
+    background-color: #f20320;
+}
+.cxBtn_no{
+    border: 1px solid #d6d6d6;
+    background-color: #d6d6d6;
+}
+.mianbao{
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+    display: flex;
+    flex-wrap:wrap;
+    justify-items: center;
+    align-items: center;
+    align-content:center;
+}
+.mianbao>a{
+    cursor: pointer;
+}
+.mianbao>a:hover{
+    color: #f20320;
+}

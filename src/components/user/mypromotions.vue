@@ -59,6 +59,7 @@
                         <span>代理</span>
                     </button>
                 </div>
+
                 <div class="setUserRebate">
                     <p class="setUserRebate_title">彩票返点 (赔率%)</p>
                     <template v-if="sliderValue!=null || BackRebatesList!==null">
@@ -80,6 +81,31 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="setUserRebate">
+                    <p class="setUserRebate_title">工资返点</p>
+                    <template v-if="sliderValue2!=null || wageList!==null">
+                        <span class="setUserRebate_number">
+                            <template v-for="s in wageList">
+                                <template v-if="s.percent==sliderValue2+'%'">
+                                    {{ mebase = s.base }}
+                                </template>
+                            </template>
+                            ({{ sliderValue2 }}%)
+                        </span>
+                    </template>
+                    <div class="ratioCtrl_Slider2 setUserRebate_la" data-before='' data-after=''>
+                        <div id="setUserRebate_number2" class="demo-slider">
+                            <div class="layui-slider ">
+                                <div class="layui-slider-bar"></div>
+                                <div class="layui-slider-wrap">
+                                    <div class="layui-slider-wrap-btn"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="bankCard_input_box clear">
                     <h6>邀请码状态<span class="modifyPwd_tip center"></span></h6>
                     <button id="inviteSwitch_btn2" :class="codestartUsing==1 ? 'inviteSwitchstyle' : 'inviteSwitchstyle_no'" v-on:click="startUsing(codestartUsing)"></button>
@@ -111,7 +137,9 @@ export default {
             codestartUsing:1, //创建新邀请的时候是否启用邀请码
             code:null,
             BackRebatesList:null,
-            sliderValue:null, //滑动的值
+            sliderValue:null, //滑动的值 
+            sliderValue2:null,
+            wageList:null,
             base:null,
         }
     },
@@ -209,7 +237,10 @@ export default {
         // 添加邀请码
         addProduceCode:function(){
             if(!isEmpty(this.base)){
-                layer.msg('请设置返点率');
+                layer.msg('请设置彩票返点');
+                return
+            }else if(!isEmpty(this.sliderValue2)){
+                layer.msg('请设置工资返点基数');
                 return
             }else if(!isEmpty(this.code)){
                 layer.msg('请生成邀请码');
@@ -218,7 +249,7 @@ export default {
                 this.$http({
                     method: 'post',
                     url: this.$store.state.postUrl+'agent/add_produce_code',
-                    data: {'token':this.userToken,'uid':this.userId,'base':this.base,'code':this.code,'status':this.codestartUsing}
+                    data: {'token':this.userToken,'uid':this.userId,'base':this.base,'code':this.code,'status':this.codestartUsing,'wage_percent':this.sliderValue2/100}
                 })
                 .then(res => {
                     if(res.data.ret==200){
@@ -252,44 +283,71 @@ export default {
         };
         
         // 下级会员返点列表
-        get_back_rebates:{
-            this.$http({
-                method: 'post',
-                url: this.$store.state.postUrl+'agent/get_back_rebates',
-                data: {'token':this.userToken,'uid':this.userId}
-            })
-            .then(res => {
-                if(res.data.ret==200){
-                    this.BackRebatesList = res.data.data;
-                    let num = null;
-                    for (let i = 0; i < this.BackRebatesList.length; i++) {
-                        num = i;
-                    }
-                    layui.use('slider', function(){
-                        layui.slider.render({
-                            elem: '#setinviteNewUser_number',
-                            theme: '#f10320',
-                            min: 0,
-                            max: num,
-                            tips: false,
-                            change: function(value){
-                                me.sliderValue = Number(me.BackRebatesList[num].percent.replace(/%/,''))+value/10;
-                                $('.ratioCtrl_Slider').attr({'data-before':me.BackRebatesList[num].percent.replace(/%/,''),'data-after': me.sliderValue});
-                            }
-                        });
-                    });
-                }else{
-                    layer.msg(res.data.msg);
+        this.$http({
+            method: 'post',
+            url: this.$store.state.postUrl+'agent/get_back_rebates',
+            data: {'token':this.userToken,'uid':this.userId}
+        })
+        .then(res => {
+            if(res.data.ret==200){
+                this.BackRebatesList = res.data.data;
+                let num = null;
+                for (let i = 0; i < this.BackRebatesList.length; i++) {
+                    num = i;
                 }
-            })
-            .catch(err => {
-                console.log(err);
-            })
-        }
+                layui.use('slider', function(){
+                    layui.slider.render({
+                        elem: '#setinviteNewUser_number',
+                        theme: '#f10320',
+                        min: 0,
+                        max: num,
+                        tips: false,
+                        change: function(value){
+                            me.sliderValue = Number(me.BackRebatesList[num].percent.replace(/%/,''))+value/10;
+                            $('.ratioCtrl_Slider').attr({'data-before':me.BackRebatesList[num].percent.replace(/%/,''),'data-after': me.sliderValue});
+                        }
+                    });
+                });
+            }else{
+                layer.msg(res.data.msg);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
+        // 下级会员工资返点列表
+        this.$http({method: 'post',url: this.$store.state.postUrl+'agent/get_wage_rebates',data: {'token':this.userToken,'uid':this.userId}})
+        .then(res => {
+            if(res.data.ret==200){
+                this.wageList = res.data.data;
+                const num = this.wageList.length-1;
+                layui.use('slider', function(){
+                    var slider2 = layui.slider;
+                    slider2.render({
+                        elem: '#setUserRebate_number2',
+                        theme: '#f10320',
+                        min: 0,
+                        max: num,
+                        tips: false,
+                        change: function(value){
+                            let tem = Number(me.wageList[num].percent.replace(/%/,''))+value/10;
+                            me.sliderValue2 = tem.toFixed(1);
+                            $('.ratioCtrl_Slider2').attr({'data-before':Math.round(me.wageList[num].percent.replace(/%/,'')*100)/100,'data-after': me.sliderValue2});
+                        }
+                    });
+                });
+            }else{
+                layer.msg(res.data.msg);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        })
     },
 }
 </script>
 <style scoped>
 .sec{width: 100%;background-color: #f1f1f1;border: none;cursor: pointer;}
+.setUserRebate{float: left;}
 </style>
 

@@ -149,7 +149,6 @@ export default {
             this.$store.commit("increment",id);
         },
         getPath(){
-            console.log(this.$route.path);
             if(this.$route.path=='/betcenter'){
                 this.dd = true;
             }else{

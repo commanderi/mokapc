@@ -15,6 +15,15 @@
                     <input type="text" class="layui-input" id="test9" placeholder="按时间段查询">
                 </span>
             </div>
+            <div class="mianbao">
+                <a v-on:click="returnTop(-1)">我的下级</a><i class="iconfont icon-next"></i>
+                <template v-for="(d,i) in nameArr">
+                    <a :key="i" v-on:click="returnTop(i)">{{ d }}</a>
+                    <template v-if="i<nameArr.length-1">
+                        <i class="iconfont icon-next"></i>
+                    </template>
+                </template>
+            </div>
             <div class="user_988_table">
                 <div class="user_988_table_top_nav clear">
                     <ul>
@@ -36,25 +45,26 @@
                             <span>总盈亏</span>
                             <span>总佣金</span>
                             <span>上级用户名</span>
+                            <span>下级报表</span>
                         </li>
                     </ul>
                     <ul class="user_988_list_body">
                         <template v-if="listData!==null">
-                        <li class="clear" v-for="(d,i) in listData" :key="i">
-                            <span>{{ d.mobile }}</span>
-                            <span>￥{{ d.recharge_total }}</span>
-                            <span>￥{{ d.withdraw_total }}</span>
-                            <span>￥{{ d.transfer_in }}</span>
-                            <span>￥{{ d.transfer_out }}</span>
-                            <span>￥{{ d.betting_money }}</span>
-                            <span>￥{{ d.winning_money }}</span>
-                            <span>￥{{ d.sale_money }}</span>
-                            <span>￥{{ d.back_money}}</span>
-                            <span>￥{{ d.win_lose }}</span>
-                            <span>￥{{ d.yj_money }}</span>
-                            <span>{{ d.up_mobile }}</span>
-                            <!-- <span><button id="query_personal_btn" v-on:click="toPersonal()">个人报表</button></span> -->
-                        </li>
+                            <li class="clear" v-for="(d,i) in listData" :key="i">
+                                <span>{{ d.mobile }}</span>
+                                <span>￥{{ d.recharge_total }}</span>
+                                <span>￥{{ d.withdraw_total }}</span>
+                                <span>￥{{ d.transfer_in }}</span>
+                                <span>￥{{ d.transfer_out }}</span>
+                                <span>￥{{ d.betting_money }}</span>
+                                <span>￥{{ d.winning_money }}</span>
+                                <span>￥{{ d.sale_money }}</span>
+                                <span>￥{{ d.back_money}}</span>
+                                <span>￥{{ d.win_lose }}</span>
+                                <span>￥{{ d.yj_money }}</span>
+                                <span>{{ d.up_mobile }}</span>
+                                <span><button id="query_personal_btn" v-on:click="toPersonal(d.mobile,d.id)">查看</button></span>
+                            </li>
                         </template>
                     </ul>
                 </div>
@@ -115,7 +125,9 @@ export default {
             startTime:null,
             endTime:null,
             listData:null,
-            thismeRed:86400
+            thismeRed:86400,
+            nameArr:[],
+            idArr:[],
         }
     },
     // html加载完成之前执行,执行顺序：父组件-子组件
@@ -146,20 +158,45 @@ export default {
             this.getTeamReport();
             document.getElementById('test9').value = null;
         },
-        toPersonal:function(){
-            layer.msg('调试中');
+        toPersonal:function(name,id){
+            this.getTeamReport(id,name);
         },
-        getTeamReport:function(){
+        returnTop:function(index){
+            if(index===-1){
+                this.idArr = [];
+                this.nameArr = [];
+                this.getTeamReport();
+            }else{
+                if(index!=this.idArr.length-1 || index!=this.nameArr.length-1){
+                    if(index==0){
+                        this.getTeamReport(this.idArr[index]);
+                        this.idArr.splice(-1,1);
+                    }else{
+                        this.getTeamReport(this.idArr[index]);
+                        this.idArr.splice(-1,index+1);
+                    }
+                }
+                // console.log(this.idArr[index],this.nameArr[index]);
+                console.log(this.idArr);
+            }
+        },
+        getTeamReport:function(id='',name=''){
             layer.open({type:3});
             this.$http({
                 method: 'post',
                 url: this.$store.state.postUrl+'agent/get_team_report',
-                data: {'token':this.userToken,'uid':this.userId,'start':this.startTime,'end':this.endTime}
+                data: {'token':this.userToken,'uid':this.userId,'start':this.startTime,'end':this.endTime,'junior_id':id}
             })
             .then(res => {
                 if(res.data.ret==200){
                     this.listData = res.data.data;
-                    console.log(this.listData)
+                    if(id){
+                        this.idArr.push(id);
+                    }
+                    if(name){
+                        this.nameArr.push(name);
+                    }
+                // console.log(this.idArr,this.nameArr);
                 }else{
                     layer.msg(res.data.msg);
                 }
@@ -217,13 +254,9 @@ export default {
 }
 </script>
 <style scoped>
-.user_988_list_title>li>span,
-.user_988_list_body>li>span{width: 8.333%;}
+.user_988_list_title>li>span{width: 7.69%;}
+.user_988_list_body>li>span{width: 7.69%;}
 #query_personal_btn{padding: 3px 4px;font-size: 12px;}
-.user_988_list_body{
-    height: auto;
-    max-height: 360px;
-    overflow-y: auto;
-}
+.user_988_list_body{height: auto;max-height: 360px;overflow-y: auto;}
 </style>
 

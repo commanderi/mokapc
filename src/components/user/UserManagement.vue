@@ -12,8 +12,8 @@
                         <li>用户名</li>
                         <li>最后登录日期</li>
                         <li>返点</li>
-                        <li>团队人数</li>
-                        <li>团队余额</li>
+                        <!-- <li>团队人数</li> -->
+                        <!-- <li>团队余额</li> -->
                         <li>个人余额</li>
                         <li>个人投注</li>
                         <li>个人充值</li>
@@ -28,8 +28,8 @@
                             <span>{{ d.mobile }}</span>
                             <span>{{ d.last }}</span>
                             <span>{{ d.base }}</span>
-                            <span>{{ d.team_number }}</span>
-                            <span>{{ d.team_balance }}</span>
+                            <!-- <span>{{ d.team_number }}</span> -->
+                            <!-- <span>{{ d.team_balance }}</span> -->
                             <span>{{ d.personal_balance }}</span>
                             <span>{{ d.personal_betting }}</span>
                             <span>{{ d.personal_recharge }}</span>
@@ -38,8 +38,8 @@
                             <span class="UserManagement_caozuo">
                                 <i class="iconfont icon-more-op"></i>
                                 <ul class="UserManagement_caozuo_ul">
-                                    <li><button v-on:click="operating(d.id,d.mobile,2)">个人报表</button></li>
-                                    <li><button v-on:click="operating(d.id,d.mobile,3)">下级</button></li>
+                                    <li><button v-on:click="operating(d.id,d.mobile,2)">交易记录</button></li>
+                                    <!-- <li><button v-on:click="operating(d.id,d.mobile,3)">下级</button></li> -->
                                     <li><button v-on:click="operating(d.id,d.mobile,4)">转账</button></li>
                                 </ul>
                             </span>
@@ -187,6 +187,7 @@
                     </tbody>
                 </table>
             </div>
+            <div id="demo8"></div>
         </div>
         <!-- 下级报表 -->
         <div class="CreateNewUser_box" v-show="createMember==3">
@@ -304,6 +305,7 @@ export default {
         },
         // 获取我的下级会员
         getMyJunior:function(page=1){
+            layer.open({type:3});
             this.$http({
                 method: 'post',
                 url: this.$store.state.postUrl+'agent/get_my_junior',
@@ -322,6 +324,7 @@ export default {
                     this.meListData = '';
                     layer.msg(res.data.msg);
                 }
+                layer.closeAll('loading');
             })
             .catch(err => {
                 console.log(err);
@@ -343,6 +346,22 @@ export default {
                 }
             });
         },
+        Pagination2:function(total,per,current,fn){
+            this.laypage.render({
+                elem: 'demo8',
+                count: total, //总条数
+                limit: per, //每页条数
+                curr: current, //起始页
+                theme: '#f20320',
+                layout: ['count', 'prev', 'page', 'next'],
+                jump: function(obj,first){
+                    if(!first){
+                        return fn(obj.curr);
+                    }
+                }
+            });
+        },
+
         operating:function(id,name,num){
             this.bottomVip = id;
             this.bottomName = name;
@@ -355,6 +374,7 @@ export default {
         },
         // 给下级转账
         transfertoLower:function(){
+            layer.open({type:3});
             if(this.money==null||this.money<=0){
                 layer.msg('转账金额必须大于0');
             }else{
@@ -370,6 +390,7 @@ export default {
                     }else{
                         layer.msg(res.data.msg);
                     }
+                    layer.closeAll('loading');
                 })
                 .catch(err => {
                     console.log(err);
@@ -394,6 +415,7 @@ export default {
                 layer.msg('请设置工资返点基数');
                 return
             }else{
+                layer.open({type:3});
                 this.$http({
                     method: 'post',
                     url: this.$store.state.postUrl+'agent/new_member',
@@ -407,6 +429,7 @@ export default {
                     }else{
                         layer.msg(res.data.msg);
                     }
+                    layer.closeAll('loading');
                 })
                 .catch(err => {
                     console.log(err);
@@ -415,6 +438,7 @@ export default {
         },
         // 下级账户明细
         getAccountDetail:function(){
+            layer.open({type:3});
             this.$http({
                 method: 'post',
                 url: this.$store.state.postUrl+'money/account_detail',
@@ -425,11 +449,14 @@ export default {
                     if(res.data.data.data.length>=1){
                         this.meListData = res.data.data;
                     }else{
+                        this.meListData = null;
                         layer.msg('暂无数据');                        
                     }
+                    this.Pagination2(res.data.data.total,res.data.data.per_page,res.data.data.current_page,eval(this.getAccountDetail));
                 }else{
                     layer.msg(res.data.msg);
                 }
+                layer.closeAll('loading');
             })
             .catch(err => {
                 console.log(err);
@@ -549,4 +576,7 @@ export default {
 #demo7{background-color: #fff;padding: 0 10px;}
 .UserManagement_table_tbody{width: 100%;height: auto;min-height: 200px;display: block;}
 .addlist{width: 100%;height: auto;}
+.UserManagement_table_ulti>li{width: 11.11%;}
+.UserManagement_table_tbody_ul>li>span{width: 11.11%;}
+.UserManagement_table_box{min-height: 233px;}
 </style>
