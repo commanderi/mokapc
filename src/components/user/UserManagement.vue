@@ -411,10 +411,10 @@ export default {
             }else if(!isEmpty(this.mebase)){
                 layer.msg('请设置彩票返点基数');
                 return
-            }else if(!isEmpty(this.sliderValue2)){
-                layer.msg('请设置工资返点基数');
-                return
             }else{
+                if(this.sliderValue2==null||this.sliderValue2==''){
+                    this.sliderValue2 = 0;
+                }
                 layer.open({type:3});
                 this.$http({
                     method: 'post',

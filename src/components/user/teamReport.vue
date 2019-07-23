@@ -160,6 +160,12 @@ export default {
         },
         toPersonal:function(name,id){
             this.getTeamReport(id,name);
+            if(this.idArr.indexOf(id)==-1){
+                this.idArr.push(id);
+            }
+            if(this.nameArr.indexOf(name)==-1){
+                this.nameArr.push(name);
+            }
         },
         returnTop:function(index){
             if(index===-1){
@@ -169,15 +175,15 @@ export default {
             }else{
                 if(index!=this.idArr.length-1 || index!=this.nameArr.length-1){
                     if(index==0){
-                        this.getTeamReport(this.idArr[index]);
+                        this.getTeamReport(this.idArr[index],this.nameArr[index]);
                         this.idArr.splice(-1,1);
+                        this.nameArr.splice(-1,1);
                     }else{
-                        this.getTeamReport(this.idArr[index]);
+                        this.getTeamReport(this.idArr[index],this.nameArr[index]);
                         this.idArr.splice(-1,index+1);
+                        this.nameArr.splice(-1,index+1);
                     }
                 }
-                // console.log(this.idArr[index],this.nameArr[index]);
-                console.log(this.idArr);
             }
         },
         getTeamReport:function(id='',name=''){
@@ -190,14 +196,9 @@ export default {
             .then(res => {
                 if(res.data.ret==200){
                     this.listData = res.data.data;
-                    if(id){
-                        this.idArr.push(id);
-                    }
-                    if(name){
-                        this.nameArr.push(name);
-                    }
-                // console.log(this.idArr,this.nameArr);
                 }else{
+                    this.idArr.splice(-1,1);
+                    this.nameArr.splice(-1,1);
                     layer.msg(res.data.msg);
                 }
                 layer.closeAll('loading');

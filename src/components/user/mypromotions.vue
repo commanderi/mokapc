@@ -239,13 +239,13 @@ export default {
             if(!isEmpty(this.base)){
                 layer.msg('请设置彩票返点');
                 return
-            }else if(!isEmpty(this.sliderValue2)){
-                layer.msg('请设置工资返点基数');
-                return
             }else if(!isEmpty(this.code)){
                 layer.msg('请生成邀请码');
                 return
             }else{
+                if(this.sliderValue2==null||this.sliderValue2==''){
+                    this.sliderValue2 = 0;
+                }
                 this.$http({
                     method: 'post',
                     url: this.$store.state.postUrl+'agent/add_produce_code',

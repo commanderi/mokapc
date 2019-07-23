@@ -15,7 +15,8 @@
                 </router-link>
             </div>
             <div class="ios_QRcode">
-                <img src="../assets/img/24cf25.png" alt="">
+                <!-- <img src="../assets/img/24cf25.png"> -->
+                <img src="../assets/img/qrCode.png">
             </div>
             <p class="dow_font">扫码下载</p>
             <div class="colse" v-on:click="colsedownloadQrcode"></div>

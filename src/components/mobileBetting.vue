@@ -17,7 +17,8 @@
                         <span class="dow_div_a_span">IOS版下载</span>
                     </a>
                     <div class="dow_div_div">
-                        <img style="width:110px;height:110px" src="../assets/img/24cf25.png">
+                        <!-- <img style="width:110px;height:110px" src="../assets/img/24cf25.png"> -->
+                        <img style="width:110px;height:110px" src="../assets/img/qrCode.png">
                     </div>
                     <p class="mobileBetting_dow_font">扫一扫下载IPhone版</p>
                 </div>
@@ -27,7 +28,8 @@
                         <span class="dow_div_a_span">Android版下载</span>
                     </a>
                     <div class="dow_div_div">
-                        <img style="width:110px;height:110px" src="../assets/img/24cf25.png">
+                        <!-- <img style="width:110px;height:110px" src="../assets/img/24cf25.png"> -->
+                        <img style="width:110px;height:110px" src="../assets/img/qrCode.png">
                     </div>
                     <p class="mobileBetting_dow_font">扫一扫下载Android版</p>
                 </div>
