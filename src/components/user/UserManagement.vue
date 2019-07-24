@@ -437,12 +437,12 @@ export default {
             }
         },
         // 下级账户明细
-        getAccountDetail:function(){
+        getAccountDetail:function(page=1){
             layer.open({type:3});
             this.$http({
                 method: 'post',
                 url: this.$store.state.postUrl+'money/account_detail',
-                data: {'token':this.userToken,'uid':this.userId,'date':this.time,'exp':this.exp,'junior_id':this.bottomVip}
+                data: {'token':this.userToken,'uid':this.userId,'date':this.time,'exp':this.exp,'junior_id':this.bottomVip,'page':page}
             })
             .then(res => {
                 if(res.data.ret==200){

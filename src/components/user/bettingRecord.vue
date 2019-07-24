@@ -155,7 +155,7 @@
                             <template v-if="xData!=null">
                                 <li class="clear">
                                     <span>{{ xData.play_name }}</span>
-                                    <span class="text_no">{{ xData.number }}</span>
+                                    <span>{{ xData.number }}</span>
                                     <span>{{ xData.one_money }}元</span>
                                     <span>{{ xData.note }}</span>
                                     <span>{{ xData.money }}</span>
