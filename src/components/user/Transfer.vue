@@ -219,8 +219,8 @@ export default {
 .yue{width: 100%;height: auto;}
 .yue>ul>li{width: 100%;height: 35px;line-height: 35px;text-align: center;}
 .yue>ul>li>span{width: 32%;display: inline-block;}
-.yue>ul>li:nth-of-type(odd){background: #f1f1f1}
+.yue>ul>li:nth-of-type(odd){background: #27bcf524}
 .yue>ul>li:nth-of-type(1){background: #ccc}
-.shuaxin{border: none;border-radius: 4px;background-color: #f20320;color: #fff;cursor: pointer;padding: 4px 12px;font-size: 13px;}
+.shuaxin{border: none;border-radius: 4px;background-color: #27bcf5;color: #fff;cursor: pointer;padding: 4px 12px;font-size: 13px;}
 </style>
 

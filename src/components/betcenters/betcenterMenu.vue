@@ -206,21 +206,21 @@ export default {
 </script>
 <style scoped>
     .menuItem{position: relative;width: 100%;height: auto;transition: color .25s cubic-bezier(.4,0,.2,1);}
-    .subMenuItem{width: 100%;height: 52px;display: block;font-size: inherit;background-color: #b60000;color: #fff;overflow: hidden;padding: 0 1rem;text-align: left;transition: padding .2s cubic-bezier(.4,0,.2,1);border: none;cursor: pointer;transition: 0.2s; -o-transition: 0.2s; -ms-transition: 0.2s; -moz-transition: 0.2s; -webkit-transition: 0.2s;}
+    .subMenuItem{width: 100%;height: 52px;display: block;font-size: inherit;background-color: #27bcf5c9;color: #fff;overflow: hidden;padding: 0 1rem;text-align: left;transition: padding .2s cubic-bezier(.4,0,.2,1);border: none;cursor: pointer;transition: 0.2s; -o-transition: 0.2s; -ms-transition: 0.2s; -moz-transition: 0.2s; -webkit-transition: 0.2s;}
     .subMenuItem:hover{color: #feb505;}
     .subMenuItem:before{background-color: hsla(0,0%,100%,.25);content: "";height: 1px;left: 1rem;position: absolute;right: 1rem;width: auto;}
     .menuBtnIcon{width: 26px;height: 26px;margin: 13px 8px;float: left;}
     .cai_font{line-height: 52px;display: block;padding-left: 10px;float: left;font-family: initial;}
     .lf_jian{display: block;position: absolute;right: 1rem;top: 14.5px;bottom: 14px;font-size: 1.25rem;transition-duration: .25s;transition-timing-function: cubic-bezier(.4,0,.2,1);}
-    .subMenuItemAll{background-color: #f20320;}
+    .subMenuItemAll{background-color: #27bcf5;}
     .subMenuItemAll:before{background-color: none;content: "";height: 0px;left: 1rem;position: absolute;right: 1rem;width: auto;}
-    .subMenuItemOther{background-color: #f20320;}
-    .subMenuItemOther:hover{background-color: #b60000;}
+    .subMenuItemOther{background-color: #27bcf5;}
+    .subMenuItemOther:hover{background-color: #27bcf5;}
     .subMenus{width: 100%;height: 0px;overflow: hidden;transition: height 500ms;}
     .subMenus_x{height: auto;max-height: 1000px;}
-    .subMenuItemChild{background-color: #f20320;color: #fff;}
+    .subMenuItemChild{background-color: #27bcf5;color: #fff;}
     .subMenuItemChild:before{background-color: none;content: "";height: 0px;left: 1rem;position: absolute;right: 1rem;width: auto;}
-    .subMenuItemChild:hover{background-color: #b60000;color: #feb505;border-left: 4px solid #ff584b;}
+    .subMenuItemChild:hover{background-color: #0081b3c9;color: #feb505;border-left: 4px solid #58bfe6;}
     /* .subMenus_1{height: 624px;}
     .subMenus_2{height: 260px;}
     .subMenus_3{height: 156px;}

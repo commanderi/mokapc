@@ -234,7 +234,7 @@ export default {
                 elem: '#test9',
                 range: true,
                 position: 'fixed',
-                theme: '#f20320',
+                theme: '#27bcf5',
                 max: thisDay(),
                 done: function(value,date,endDate){
                     if(value==null||value==''){

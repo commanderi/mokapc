@@ -120,7 +120,7 @@ export default {
                 count: total, //总条数
                 limit: per, //每页条数
                 curr: current, //起始页
-                theme: '#f20320',
+                theme: '#27bcf5',
                 layout: ['count', 'prev', 'page', 'next'],
                 jump: function(obj,first){
                     if(!first){
@@ -156,7 +156,7 @@ export default {
                 elem: '#test8',
                 range: true,
                 position: 'fixed',
-                theme: '#f20320',
+                theme: '#27bcf5',
                 max: thisDay(),
                 done: function(value,date,endDate){
                     if(value==null||value==''){
