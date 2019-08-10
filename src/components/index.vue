@@ -201,6 +201,7 @@ export default {
     },
     // html加载完成后执行,执行顺序：子组件-父组件
     mounted(){
+        localStorage.removeItem('10');
         // 获取全部彩种
         getCates:{
             this.$http({

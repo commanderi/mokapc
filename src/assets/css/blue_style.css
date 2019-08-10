@@ -105,7 +105,7 @@ body{
     float: none;
     min-height: 2rem;
     min-width: 7rem;
-    color: #1e1f23;
+    color: #fff;
     border: 1px solid #15084c;
     box-shadow: 1px 3px 12px 1px #000;
     background: #27bcf5;
@@ -119,10 +119,10 @@ body{
     float: none;
     min-height: 2rem;
     min-width: 7rem;
-    color: #1e1f23;
+    color: #fff;
     border: 1px solid #15084c;
     box-shadow: 1px 3px 12px 1px #000;
-    background: #ffc353;
+    background: #27bcf5;
     cursor: pointer;
 }
 .header_top_left{
@@ -4464,10 +4464,10 @@ footer{
     width: 86px;
     height: 36px;
     padding: 0 16px;
-    border: 1px solid #f20320;
+    border: 1px solid #27bcf5;
     border-radius: 5px;
     margin: 8px 8px 8px 0px;
-    color: #f20320;
+    color: #27bcf5;
     font-size: 15px;
     font-weight: 600;
     background-color: #fff;

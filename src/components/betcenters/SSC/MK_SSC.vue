@@ -496,8 +496,8 @@ export default {
         return {
             NavOne_index:0,
             NavTwo_index:1,
-            NavOneData:this.$store.state.specificTypeData[0],//默认一级菜单数据
-            NavTwoData:this.$store.state.specificTypeData[0].play_rule[0].odds[0],//默认二级菜单数据
+            NavOneData: this.$store.state.specificTypeData[0],//默认一级菜单数据
+            NavTwoData: this.$store.state.specificTypeData[0].play_rule[0].odds[0],//默认二级菜单数据
             moneyType:['元','角','分','厘'],
             setMoneyNumber_index:0,
             titleArr:['万位','千位','百位','十位','个位'],
@@ -525,7 +525,7 @@ export default {
                 singleMoney:2, //单注金额
                 bettingNumber:0, //注数
                 setMultipleNumber:1, //投注倍数
-                rate:this.$store.state.specificTypeData[0].play_rule[0].odds[0].rate, //默认赔率
+                rate: this.$store.state.specificTypeData[0].play_rule[0].odds[0].rate, //默认赔率
             },
             myJson:[], //确认投注的数据
             myObj:[], //立即投注的数据
@@ -560,7 +560,12 @@ export default {
         },
         // 选择的左侧大彩种数据
         specificTypeData(){
-            return this.$store.state.specificTypeData;
+            if(this.$store.state.specificTypeID[0]==10){
+                // this.$store.state.specificTypeData.splice(0,2);
+                return this.$store.state.specificTypeData;
+            }else{
+                return this.$store.state.specificTypeData;
+            }
         },
     },
     methods:{
@@ -598,10 +603,23 @@ export default {
         },
         // 添加号码
         addNumberBtn:function(){
-            if(this.textareaData){
-                getTextareaData(this);
+            if(this.$store.state.specificTypeID[0]==10){
+                if(this.NavOne_index==0||this.NavOne_index==1){
+                    layer.alert('该玩法正在维护中',{title: '提示',icon: 2,skin: 'layer-ext-moon'});
+                    this.clearUserArr();
+                }else{
+                    if(this.textareaData){
+                        getTextareaData(this);
+                    }else{
+                        AssemblyData(this,2);
+                    }
+                }
             }else{
-                AssemblyData(this,2);
+                if(this.textareaData){
+                    getTextareaData(this);
+                }else{
+                    AssemblyData(this,2);
+                }
             }
         },
         // 监听单式文本域
@@ -623,26 +641,58 @@ export default {
         },
         // 单选
         singleSelectFn(e,y,x){
-            switch (this.NavTwo_index) {
-                // 玩法是汉字的情况
-                case 6:case 46:case 52:case 81:case 82:case 83:case 84:case 85:case 86:case 87:case 88:case 89:case 90:
-                    singleSelectChinese(e,y,x,this.$data);
-                break;
-                default:
-                    singleSelect(e,y,x,this.$data);
-                break;
+            if(this.$store.state.specificTypeID[0]==10){
+                if(this.NavOne_index==0||this.NavOne_index==1){
+                    layer.alert('该玩法正在维护中',{title: '提示',icon: 2,skin: 'layer-ext-moon'});
+                }else{
+                    switch (this.NavTwo_index) {
+                        // 玩法是汉字的情况
+                        case 6:case 46:case 52:case 81:case 82:case 83:case 84:case 85:case 86:case 87:case 88:case 89:case 90:
+                            singleSelectChinese(e,y,x,this.$data);
+                        break;
+                        default:
+                            singleSelect(e,y,x,this.$data);
+                        break;
+                    }
+                }
+            }else{
+                switch (this.NavTwo_index) {
+                    // 玩法是汉字的情况
+                    case 6:case 46:case 52:case 81:case 82:case 83:case 84:case 85:case 86:case 87:case 88:case 89:case 90:
+                        singleSelectChinese(e,y,x,this.$data);
+                    break;
+                    default:
+                        singleSelect(e,y,x,this.$data);
+                    break;
+                }
             }
         },
         // 多选
         multipleSelectFn(e,y,x){
-            switch (this.NavTwo_index) {
-                case 6:
-                    this.clearUserArr();
-                    this.userArrChinese = [[],[]];
-                break;
-                default:
-                    multipleSelect(e,y,x,this.$data);
-                break;
+            if(this.$store.state.specificTypeID[0]==10){
+                if(this.NavOne_index==0||this.NavOne_index==1){
+                    layer.alert('该玩法正在维护中',{title: '提示',icon: 2,skin: 'layer-ext-moon'});
+                }else{
+                    switch (this.NavTwo_index) {
+                        case 6:
+                            this.clearUserArr();
+                            this.userArrChinese = [[],[]];
+                        break;
+                        default:
+                            multipleSelect(e,y,x,this.$data);
+                        break;
+                    }
+                }
+            }else{
+                switch (this.NavTwo_index) {
+                    case 6:
+                        this.clearUserArr();
+                        this.userArrChinese = [[],[]];
+                    break;
+                    default:
+                        multipleSelect(e,y,x,this.$data);
+                    break;
+                }
             }
         },
         // 点击一级菜单选择的数据
